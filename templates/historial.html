@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="seccion-titulo">
+    <h2>📊 Historial de Pagos</h2>
+</div>
+
+<div class="lista-historial">
+    {% if meses %}
+        {% for m in meses %}
+        <a href="{{ url_for('pagos', mes=m.mes) }}" class="historial-item" id="historial-{{ m.mes }}">
+            <div class="historial-mes">
+                <span class="historial-nombre">{{ m.nombre }}</span>
+                <span class="historial-count">{{ m.pagados }}/{{ m.cantidad }} pagaron</span>
+            </div>
+            <div class="historial-montos">
+                <div class="historial-cobrado">
+                    <span class="label">Cobrado</span>
+                    <span class="valor verde">${{ m.cobrado|formato_pesos }}</span>
+                </div>
+                <div class="historial-pendiente">
+                    <span class="label">Pendiente</span>
+                    <span class="valor rojo">${{ m.pendiente|formato_pesos }}</span>
+                </div>
+                <div class="historial-total">
+                    <span class="label">Total</span>
+                    <span class="valor">${{ m.total|formato_pesos }}</span>
+                </div>
+            </div>
+            {% if m.pendiente > 0 %}
+            <div class="barra-progreso">
+                <div class="barra-fill" style="width: {{ (m.cobrado / m.total * 100) if m.total > 0 else 0 }}%"></div>
+            </div>
+            {% else %}
+            <div class="barra-progreso completo">
+                <div class="barra-fill" style="width: 100%"></div>
+            </div>
+            {% endif %}
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <p>No hay historial todavía.</p>
+            <p>Los meses irán apareciendo a medida que uses la app.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

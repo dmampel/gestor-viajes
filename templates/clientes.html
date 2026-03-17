@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="seccion-titulo">
+    <h2>👥 Clientes</h2>
+</div>
+
+<!-- Formulario para agregar cliente -->
+<form method="POST" action="{{ url_for('crear_cliente') }}" class="form-nuevo" id="form-nuevo-cliente">
+    <div class="form-row">
+        <input type="text" name="nombre" placeholder="Nombre del cliente" required class="input-field" id="input-nombre">
+    </div>
+    <button type="submit" class="btn-primary" id="btn-agregar-cliente">+ Agregar</button>
+</form>
+
+<!-- Lista de clientes -->
+<div class="lista-clientes">
+    {% for cliente in clientes %}
+    <div class="cliente-item {{ 'inactivo' if not cliente.activo }}" id="cliente-{{ cliente.id }}">
+        <div class="cliente-info">
+            <span class="cliente-nombre">{{ cliente.nombre.capitalize() }}</span>
+            <span class="cliente-viajes-count">{{ cliente.cant_viajes }} viaje{{ 's' if cliente.cant_viajes != 1 }}</span>
+        </div>
+
+        <div class="cliente-acciones">
+            <!-- Botón editar -->
+            <button type="button" class="btn-icon" onclick="toggleEdit({{ cliente.id }})" id="btn-editar-{{ cliente.id }}">✏️</button>
+
+            <!-- Botón activar/desactivar -->
+            <form method="POST" action="{{ url_for('toggle_cliente', id=cliente.id) }}" style="display:inline">
+                <button type="submit" class="btn-icon" id="btn-toggle-{{ cliente.id }}">
+                    {% if cliente.activo %}🟢{% else %}🔴{% endif %}
+                </button>
+            </form>
+        </div>
+
+        <!-- Formulario de edición (oculto) -->
+        <form method="POST" action="{{ url_for('editar_cliente', id=cliente.id) }}"
+              class="form-editar" id="edit-{{ cliente.id }}" style="display:none">
+            <div class="form-row">
+                <input type="text" name="nombre" value="{{ cliente.nombre }}" required class="input-field">
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn-guardar">Guardar</button>
+                <button type="button" class="btn-cancelar" onclick="toggleEdit({{ cliente.id }})">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
+
+    {% if not clientes %}
+    <div class="empty-state">
+        <p>No hay clientes todavía. ¡Agregá el primero! ☝️</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleEdit(id) {
+    const form = document.getElementById('edit-' + id);
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

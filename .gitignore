@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+datos.db
+.env
+.gemini/
+.agent/
+.agents/
+brain/
+*.log
+node_modules/
+.DS_Store

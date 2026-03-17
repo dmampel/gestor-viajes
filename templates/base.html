@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Control de Pagos 🚐</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Gestión de Viajes</h1>
+        </header>
+
+        <main class="app-content">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                <div class="flash-toast">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="{{ url_for('pagos') }}" class="nav-item {% if request.endpoint == 'pagos' %}active{% endif %}">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Pagos</span>
+            </a>
+            <a href="{{ url_for('clientes') }}"
+                class="nav-item {% if request.endpoint == 'clientes' %}active{% endif %}">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">Clientes</span>
+            </a>
+            <a href="{{ url_for('viajes') }}" class="nav-item {% if request.endpoint == 'viajes' %}active{% endif %}">
+                <span class="nav-icon">🚐</span>
+                <span class="nav-label">Viajes</span>
+            </a>
+            <a href="{{ url_for('historial') }}"
+                class="nav-item {% if request.endpoint == 'historial' %}active{% endif %}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Historial</span>
+            </a>
+        </nav>
+    </div>
+</body>
+
+</html>

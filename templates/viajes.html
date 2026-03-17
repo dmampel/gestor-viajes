@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="seccion-titulo">
+    <h2>🚐 Viajes</h2>
+</div>
+
+<!-- Formulario para agregar viaje -->
+{% if clientes %}
+<form method="POST" action="{{ url_for('crear_viaje') }}" class="form-nuevo" id="form-nuevo-viaje">
+    <div class="form-row">
+        <select name="cliente_id" required class="input-field" id="select-cliente">
+            <option value="" disabled selected>Cliente...</option>
+            {% for c in clientes %}
+            <option value="{{ c.id }}">{{ c.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="text" name="salida" placeholder="Salida (ej: Casa)" required class="input-field" id="input-salida">
+        <span class="arrow-icon">→</span>
+        <input type="text" name="destino" placeholder="Destino (ej: Colegio)" required class="input-field" id="input-destino">
+    </div>
+    <div class="form-row">
+        <input type="number" name="monto" placeholder="Monto $" step="100" min="0" required class="input-field" id="input-monto">
+    </div>
+    <button type="submit" class="btn-primary" id="btn-agregar-viaje">+ Agregar viaje</button>
+</form>
+{% else %}
+<div class="empty-state" style="padding: 20px">
+    <p>Primero necesitás agregar clientes.</p>
+    <a href="{{ url_for('clientes') }}" class="btn-primary" style="display:inline-block; margin-top:10px">Ir a Clientes</a>
+</div>
+{% endif %}
+
+<!-- Lista de viajes recientes -->
+<div class="lista-viajes">
+    {% if viajes %}
+        <div class="viaje-grupo-header">Viajes Recientes (30 días)</div>
+    {% endif %}
+
+    {% for viaje in viajes %}
+        <div class="viaje-item {{ 'inactivo' if not viaje.activo }}" id="viaje-{{ viaje.id }}">
+            <div class="cliente-nombre" style="font-size: 0.75rem; color: var(--accent-light); margin-bottom: 4px;">
+                {{ viaje.cliente_nombre.capitalize() }}
+            </div>
+            <div class="viaje-ruta">
+                <span class="viaje-salida">{{ viaje.salida.capitalize() }}</span>
+                <span class="viaje-flecha">→</span>
+                <span class="viaje-destino">{{ viaje.destino.capitalize() }}</span>
+            </div>
+            <div class="viaje-meta">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span class="viaje-monto">${{ viaje.monto|formato_pesos }}</span>
+                    <span class="pago-fecha" style="font-size: 0.65rem;">📅 {{ viaje.fecha_creacion|formato_fecha }}</span>
+                </div>
+                <div class="viaje-acciones">
+                    <button type="button" class="btn-icon btn-sm" onclick="toggleEditViaje({{ viaje.id }})">✏️</button>
+                    <form method="POST" action="{{ url_for('eliminar_viaje', id=viaje.id) }}" style="display:inline">
+                        <button type="submit" class="btn-icon btn-sm">🗑️</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Formulario de edición (oculto) -->
+            <form method="POST" action="{{ url_for('editar_viaje', id=viaje.id) }}"
+                  class="form-editar" id="edit-viaje-{{ viaje.id }}" style="display:none">
+                <div class="form-row">
+                    <input type="text" name="salida" value="{{ viaje.salida }}" required class="input-field">
+                    <span class="arrow-icon">→</span>
+                    <input type="text" name="destino" value="{{ viaje.destino }}" required class="input-field">
+                </div>
+                <div class="form-row">
+                    <input type="number" name="monto" value="{{ viaje.monto }}" step="100" min="0" required class="input-field">
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                    <button type="button" class="btn-cancelar" onclick="toggleEditViaje({{ viaje.id }})">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    {% endfor %}
+
+    {% if not viajes and clientes %}
+    <div class="empty-state">
+        <p>No hay viajes todavía. ¡Agregá el primero! ☝️</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Objeto con los últimos viajes de cada cliente
+const ultimosViajes = {{ ultimos_viajes | tojson | safe }};
+
+// Escuchar cambios en el selector de cliente
+const selectCliente = document.getElementById('select-cliente');
+const inputSalida = document.getElementById('input-salida');
+const inputDestino = document.getElementById('input-destino');
+const inputMonto = document.getElementById('input-monto');
+
+if (selectCliente) {
+    selectCliente.addEventListener('change', function() {
+        const clienteId = this.value;
+        const ultimo = ultimosViajes[clienteId];
+        
+        if (ultimo) {
+            // Autocompletar con los datos del último viaje
+            inputSalida.value = ultimo.salida;
+            inputDestino.value = ultimo.destino;
+            inputMonto.value = ultimo.monto;
+        } else {
+            // Si es un cliente nuevo sin viajes, limpiar los campos
+            inputSalida.value = '';
+            inputDestino.value = '';
+            inputMonto.value = '';
+        }
+    });
+}
+
+function toggleEditViaje(id) {
+    const form = document.getElementById('edit-viaje-' + id);
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

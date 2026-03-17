@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pagos-header">
+    <div class="mes-navegacion">
+        <a href="{{ url_for('pagos', mes=mes_ant) }}" class="btn-mes">◀</a>
+        <h2 class="mes-titulo">{{ nombre_mes }}</h2>
+        <a href="{{ url_for('pagos', mes=mes_sig) }}" class="btn-mes">▶</a>
+    </div>
+
+    <div class="resumen-cards">
+        <div class="resumen-card cobrado">
+            <span class="resumen-label">Cobrado</span>
+            <span class="resumen-valor">${{ cobrado|formato_pesos }}</span>
+        </div>
+        <div class="resumen-card pendiente">
+            <span class="resumen-label">Pendiente</span>
+            <span class="resumen-valor">${{ pendiente|formato_pesos }}</span>
+        </div>
+        <div class="resumen-card total">
+            <span class="resumen-label">Total</span>
+            <span class="resumen-valor">${{ total|formato_pesos }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="board-pagos">
+    <!-- 📥 Sin Asignar -->
+    <div class="pago-column" id="col-sin_asignar">
+        <div class="column-header">
+            <span class="column-icon">📥</span>
+            <span class="column-title">Sin Asignar</span>
+        </div>
+        <div class="cards-container" data-turno="sin_asignar">
+            {% for pago in pagos if pago.turno == 'sin_asignar' or not pago.turno %}
+                {% include 'partial_pago_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 🌅 Mañana -->
+    <div class="pago-column" id="col-manana">
+        <div class="column-header">
+            <span class="column-icon">🌅</span>
+            <span class="column-title">Mañana / 7:00am - 12:00pm</span>
+        </div>
+        <div class="cards-container" data-turno="manana">
+            {% for pago in pagos if pago.turno == 'manana' %}
+                {% include 'partial_pago_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ☀️ Tarde -->
+    <div class="pago-column" id="col-tarde">
+        <div class="column-header">
+            <span class="column-icon">☀️</span>
+            <span class="column-title">Tarde / 12:00pm - 6:00pm</span>
+        </div>
+        <div class="cards-container" data-turno="tarde">
+            {% for pago in pagos if pago.turno == 'tarde' %}
+                {% include 'partial_pago_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 🌙 Noche -->
+    <div class="pago-column" id="col-noche">
+        <div class="column-header">
+            <span class="column-icon">🌙</span>
+            <span class="column-title">Noche / 6:00pm - 12:00am</span>
+        </div>
+        <div class="cards-container" data-turno="noche">
+            {% for pago in pagos if pago.turno == 'noche' %}
+                {% include 'partial_pago_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% if not pagos %}
+    <div class="empty-state">
+        <p>No hay viajes activos.</p>
+        <a href="{{ url_for('viajes') }}" class="btn-primary">Agregar viajes</a>
+    </div>
+{% endif %}
+
+<!-- Sortable.js -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const containers = document.querySelectorAll('.cards-container');
+        
+        containers.forEach(container => {
+            new Sortable(container, {
+                group: 'pagos',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                forceFallback: true, // Mejor para móviles
+                delay: 100, // Prevenir arrastre accidental
+                delayOnTouchOnly: true,
+                onStart: function() {
+                    document.body.classList.add('grabbing');
+                },
+                onEnd: function(evt) {
+                    document.body.classList.remove('grabbing');
+                    const itemEl = evt.item;
+                    const targetContainer = evt.to;
+                    const nuevoTurno = targetContainer.getAttribute('data-turno');
+                    const pagoId = itemEl.getAttribute('data-pago-id');
+                    
+                    if (evt.from !== evt.to) {
+                        // Guardado automático
+                        fetch('/pagos/update_turno', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                pago_id: pagoId,
+                                nuevo_turno: nuevoTurno
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                console.log('Turno actualizado:', nuevoTurno);
+                            } else {
+                                alert('Error al guardar el cambio');
+                                location.reload(); // Recargar si falla
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error de conexión');
+                            location.reload();
+                        });
+                    }
+                }
+            });
+        });
+    });
+
+    // Función para manejar el toggle de pagado sin formulario (AJAX)
+    // Opcional: si quieres que el check también sea automático sin recargar toda la página
+    function togglePagado(pagoId) {
+        const formData = new FormData();
+        formData.append('pago_id', pagoId);
+        formData.append('mes', '{{ mes }}');
+
+        fetch('{{ url_for("toggle_pago") }}', {
+            method: 'POST',
+            body: formData
+        }).then(() => {
+            location.reload(); // Por ahora recargamos para actualizar resúmenes
+        });
+    }
+</script>
+{% endblock %}

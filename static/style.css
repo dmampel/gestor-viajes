@@ -1,0 +1,826 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0f1117;
+    --bg-card: #1a1d27;
+    --bg-card-hover: #222639;
+    --text: #e8e9ed;
+    --text-secondary: #8b8fa3;
+    --accent: #6c5ce7;
+    --accent-light: #a29bfe;
+    --verde: #00b894;
+    --verde-bg: rgba(0, 184, 148, 0.12);
+    --rojo: #ff6b6b;
+    --rojo-bg: rgba(255, 107, 107, 0.12);
+    --amarillo: #ffc048;
+    --borde: rgba(255, 255, 255, 0.06);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+html {
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+body.grabbing, body.grabbing * {
+    cursor: grabbing !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+
+/* ===== App Layout ===== */
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-header {
+    padding: 20px 20px 10px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    border-bottom: 1px solid var(--borde);
+}
+
+.app-header h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent-light), var(--amarillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.app-content {
+    flex: 1;
+    padding: 16px 16px 100px;
+}
+
+/* ===== Bottom Navigation ===== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    justify-content: space-around;
+    background: rgba(26, 29, 39, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--borde);
+    padding: 6px 0;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    gap: 2px;
+}
+
+.nav-item.active {
+    color: var(--accent-light);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.nav-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ===== Pagos - Header ===== */
+.pagos-header {
+    margin-bottom: 20px;
+}
+
+.mes-navegacion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.mes-titulo {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.btn-mes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1rem;
+    border: 1px solid var(--borde);
+    transition: all 0.2s;
+}
+
+.btn-mes:active {
+    background: var(--bg-card-hover);
+    transform: scale(0.95);
+}
+
+/* ===== Resumen Cards ===== */
+.resumen-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+}
+
+.resumen-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--borde);
+}
+
+.resumen-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+.resumen-valor {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.resumen-card.cobrado .resumen-valor {
+    color: var(--verde);
+}
+
+.resumen-card.pendiente .resumen-valor {
+    color: var(--rojo);
+}
+
+.resumen-card.total .resumen-valor {
+    color: var(--amarillo);
+}
+
+/* ===== Lista de Pagos (Board Style) ===== */
+.board-pagos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.pago-column {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius);
+    padding: 12px;
+    min-height: 100px;
+    border: 1px dashed var(--borde);
+    transition: background-color 0.2s;
+}
+
+.pago-column.sortable-ghost {
+    background: rgba(108, 92, 231, 0.1);
+}
+
+.column-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+}
+
+.column-icon {
+    font-size: 1.2rem;
+}
+
+.column-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 50px; /* Asegura que se pueda soltar aunque esté vacía */
+}
+
+/* Ajustes para las cartas cuando están en columnas */
+.pago-item {
+    cursor: grab;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.pago-item:active {
+    cursor: grabbing;
+}
+
+/* Forzar cursor de 'grabbing' en todo el cuerpo mientras se arrastra */
+body.grabbing {
+    cursor: grabbing !important;
+}
+
+
+.pago-btn {
+    /* pointer-events: none; */ /* Eliminado para permitir el click en el check */
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.2s;
+}
+
+.sortable-drag {
+    opacity: 0;
+}
+
+.sortable-ghost {
+    opacity: 0.4;
+    transform: scale(0.95);
+}
+
+.pago-item:active {
+    transform: scale(0.98);
+}
+
+.pago-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.2s;
+}
+
+.pago-item.pagado .pago-btn {
+    background: var(--verde-bg);
+    border-color: rgba(0, 184, 148, 0.2);
+}
+
+.pago-item.no-pagado .pago-btn {
+    background: var(--bg-card);
+}
+
+.pago-check {
+    font-size: 1.4rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.check-icon.pending {
+    opacity: 0.4;
+}
+
+.pago-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pago-nombre {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.pago-ruta {
+    font-size: 0.75rem;
+    color: var(--accent-light);
+    font-weight: 500;
+}
+
+.pago-fecha {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.pago-monto {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.pago-estado {
+    flex-shrink: 0;
+}
+
+.estado-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.estado-badge.pagado {
+    background: var(--verde-bg);
+    color: var(--verde);
+}
+
+.estado-badge.debe {
+    background: var(--rojo-bg);
+    color: var(--rojo);
+}
+
+/* ===== Sección Título ===== */
+.seccion-titulo {
+    margin-bottom: 16px;
+}
+
+.seccion-titulo h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* ===== Formularios ===== */
+.form-nuevo {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid var(--borde);
+}
+
+.form-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.input-field {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--borde);
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-field:focus {
+    border-color: var(--accent);
+}
+
+.input-field::placeholder {
+    color: var(--text-secondary);
+}
+
+select.input-field {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b8fa3' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+select.input-field option {
+    background: var(--bg-card);
+    color: var(--text);
+}
+
+.arrow-icon {
+    color: var(--accent-light);
+    font-weight: 700;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-primary:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* ===== Lista Clientes ===== */
+.lista-clientes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cliente-item {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    border: 1px solid var(--borde);
+    transition: all 0.2s;
+}
+
+.cliente-item.inactivo {
+    opacity: 0.45;
+}
+
+.cliente-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cliente-nombre {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.cliente-viajes-count {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.cliente-acciones {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.btn-icon {
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-icon.btn-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+}
+
+.btn-icon:active {
+    transform: scale(0.9);
+}
+
+/* ===== Form Editar ===== */
+.form-editar {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--borde);
+}
+
+.btn-guardar {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--verde);
+    color: white;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancelar {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-guardar:active, .btn-cancelar:active {
+    transform: scale(0.97);
+}
+
+/* ===== Viajes ===== */
+.lista-viajes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.viaje-grupo-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-light);
+    padding: 12px 4px 4px;
+    margin-top: 4px;
+}
+
+.viaje-grupo-header:first-child {
+    margin-top: 0;
+}
+
+.viaje-item {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    border: 1px solid var(--borde);
+    transition: all 0.2s;
+}
+
+.viaje-item.inactivo {
+    opacity: 0.45;
+}
+
+.viaje-ruta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.viaje-salida, .viaje-destino {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.viaje-flecha {
+    color: var(--accent-light);
+    font-weight: 700;
+}
+
+.viaje-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.viaje-monto {
+    font-weight: 700;
+    color: var(--amarillo);
+    font-size: 1rem;
+}
+
+.viaje-acciones {
+    display: flex;
+    gap: 6px;
+}
+
+/* ===== Historial ===== */
+.lista-historial {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.historial-item {
+    display: block;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--borde);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+}
+
+.historial-item:active {
+    transform: scale(0.98);
+    background: var(--bg-card-hover);
+}
+
+.historial-mes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.historial-nombre {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.historial-count {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.historial-montos {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.historial-cobrado,
+.historial-pendiente,
+.historial-total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.historial-montos .label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+.historial-montos .valor {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.valor.verde { color: var(--verde); }
+.valor.rojo { color: var(--rojo); }
+
+/* ===== Barra de Progreso ===== */
+.barra-progreso {
+    height: 4px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.barra-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--verde));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.barra-progreso.completo .barra-fill {
+    background: var(--verde);
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+}
+
+/* ===== Number input arrows hide ===== */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ===== Animaciones Globales ===== */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pago-item, .viaje-item, .cliente-item, .historial-item {
+    /* animation: slideUpFade 0.4s ease forwards; */ /* Eliminado por solicitud del usuario */
+}
+
+/* Retrasar animación para efecto cascada (opcional, aplicable a los primeros) */
+.lista-pagos > *:nth-child(1), .lista-viajes > *:nth-child(1) { animation-delay: 0.05s; }
+.lista-pagos > *:nth-child(2), .lista-viajes > *:nth-child(2) { animation-delay: 0.1s; }
+.lista-pagos > *:nth-child(3), .lista-viajes > *:nth-child(3) { animation-delay: 0.15s; }
+
+/* ===== Toast (Notificaciones) ===== */
+.flash-messages {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.flash-toast {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--verde);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: var(--sombra);
+    animation: slideDownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOut 0.4s ease 2.5s forwards;
+}
+
+@keyframes slideDownFade {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
