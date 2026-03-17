@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from database import get_db, init_db
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+import os
+import subprocess
 
 app = Flask(__name__)
 app.secret_key = 'dixi_viajes_secret_key'
@@ -416,6 +418,42 @@ def historial():
     db.close()
 
     return render_template('historial.html', meses=resumen_meses)
+
+
+# --- Ruta de Despliegue Automático ---
+
+@app.route('/deploy', methods=['POST'])
+def deploy():
+    """Ruta para recibir webhooks de GitHub y actualizar la app."""
+    try:
+        # 1. Pull de los cambios desde GitHub
+        pull_output = subprocess.check_output(['git', 'pull', 'origin', 'main'], stderr=subprocess.STDOUT).decode('utf-8')
+        
+        # 2. Reiniciar el servidor (específico de PythonAnywhere)
+        # Esto funciona 'tocando' el archivo WSGI
+        # Ajustar el nombre de usuario si es diferente a 'dmampel'
+        wsgi_path = '/var/www/dmampel_pythonanywhere_com_wsgi.py'
+        if os.path.exists(wsgi_path):
+            os.utime(wsgi_path, None)
+            restart_msg = "Servidor reiniciado."
+        else:
+            restart_msg = "WSGI no encontrado (¿Estás en local?)."
+
+        return {
+            "status": "success",
+            "message": f"Despliegue completado. {restart_msg}",
+            "git_output": pull_output
+        }, 200
+    except subprocess.CalledProcessError as e:
+        return {
+            "status": "error",
+            "message": str(e.output.decode('utf-8'))
+        }, 500
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }, 500
 
 
 if __name__ == '__main__':
