@@ -431,8 +431,8 @@ def deploy():
         
         # 2. Reiniciar el servidor (específico de PythonAnywhere)
         # Esto funciona 'tocando' el archivo WSGI
-        # Ajustar el nombre de usuario si es diferente a 'dmampel'
-        wsgi_path = '/var/www/dmampel_pythonanywhere_com_wsgi.py'
+        # Ajustar el nombre de usuario si es diferente a 'gestorviajes'
+        wsgi_path = '/var/www/gestorviajes_pythonanywhere_com_wsgi.py'
         if os.path.exists(wsgi_path):
             os.utime(wsgi_path, None)
             restart_msg = "Servidor reiniciado."
