@@ -429,11 +429,18 @@ def deploy():
         # 0. Asegurar que la base de datos esté al día
         init_db()
         
-        # 1. Pull de los cambios desde GitHub
-        pull_output = subprocess.check_output(['git', 'pull', 'origin', 'main'], stderr=subprocess.STDOUT).decode('utf-8')
+        project_root = os.path.dirname(os.path.abspath(__file__))
         
-        # 2. Reiniciar el servidor (específico de PythonAnywhere)
-        # Esto funciona 'tocando' el archivo WSGI
+        # 1. Verificar si es un repositorio Git, si no, inicializarlo
+        if not os.path.exists(os.path.join(project_root, '.git')):
+            subprocess.check_call(['git', 'init'], cwd=project_root)
+            subprocess.check_call(['git', 'remote', 'add', 'origin', 'https://github.com/dmampel/gestor-viajes.git'], cwd=project_root)
+        
+        # 2. Traer cambios y forzar actualización (reset --hard es más limpio para deploy)
+        subprocess.check_call(['git', 'fetch', '--all'], cwd=project_root)
+        pull_output = subprocess.check_output(['git', 'reset', '--hard', 'origin/main'], cwd=project_root, stderr=subprocess.STDOUT).decode('utf-8')
+        
+        # 3. Reiniciar el servidor (específico de PythonAnywhere)
         # Ajustar el nombre de usuario si es diferente a 'gestorviajes'
         wsgi_path = '/var/www/gestorviajes_pythonanywhere_com_wsgi.py'
         if os.path.exists(wsgi_path):
@@ -444,18 +451,18 @@ def deploy():
 
         return {
             "status": "success",
-            "message": f"Despliegue completado. {restart_msg}",
+            "message": f"Despliegue completado con éxito. {restart_msg}",
             "git_output": pull_output
         }, 200
     except subprocess.CalledProcessError as e:
         return {
             "status": "error",
-            "message": str(e.output.decode('utf-8'))
+            "message": f"Error en comando Git: {e.output.decode('utf-8') if e.output else str(e)}"
         }, 500
     except Exception as e:
         return {
             "status": "error",
-            "message": str(e)
+            "message": f"Error inesperado: {str(e)}"
         }, 500
 
 
