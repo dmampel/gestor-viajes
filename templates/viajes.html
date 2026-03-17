@@ -12,7 +12,7 @@
         <select name="cliente_id" required class="input-field" id="select-cliente">
             <option value="" disabled selected>Cliente...</option>
             {% for c in clientes %}
-            <option value="{{ c.id }}">{{ c.nombre }}</option>
+            <option value="{{ c.id }}">{{ c.nombre | cap_palabras }}</option>
             {% endfor %}
         </select>
     </div>
@@ -42,12 +42,12 @@
     {% for viaje in viajes %}
         <div class="viaje-item {{ 'inactivo' if not viaje.activo }}" id="viaje-{{ viaje.id }}">
             <div class="cliente-nombre" style="font-size: 0.75rem; color: var(--accent-light); margin-bottom: 4px;">
-                {{ viaje.cliente_nombre.capitalize() }}
+                {{ viaje.cliente_nombre | cap_palabras }}
             </div>
             <div class="viaje-ruta">
-                <span class="viaje-salida">{{ viaje.salida.capitalize() }}</span>
+                <span class="viaje-salida">{{ viaje.salida | cap_palabras }}</span>
                 <span class="viaje-flecha">→</span>
-                <span class="viaje-destino">{{ viaje.destino.capitalize() }}</span>
+                <span class="viaje-destino">{{ viaje.destino | cap_palabras }}</span>
             </div>
             <div class="viaje-meta">
                 <div style="display: flex; flex-direction: column; gap: 2px;">

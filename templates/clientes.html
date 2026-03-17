@@ -18,7 +18,7 @@
     {% for cliente in clientes %}
     <div class="cliente-item {{ 'inactivo' if not cliente.activo }}" id="cliente-{{ cliente.id }}">
         <div class="cliente-info">
-            <span class="cliente-nombre">{{ cliente.nombre.capitalize() }}</span>
+            <span class="cliente-nombre">{{ cliente.nombre | cap_palabras }}</span>
             <span class="cliente-viajes-count">{{ cliente.cant_viajes }} viaje{{ 's' if cliente.cant_viajes != 1 }}</span>
         </div>
 
