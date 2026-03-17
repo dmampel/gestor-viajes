@@ -426,6 +426,9 @@ def historial():
 def deploy():
     """Ruta para recibir webhooks de GitHub y actualizar la app."""
     try:
+        # 0. Asegurar que la base de datos esté al día
+        init_db()
+        
         # 1. Pull de los cambios desde GitHub
         pull_output = subprocess.check_output(['git', 'pull', 'origin', 'main'], stderr=subprocess.STDOUT).decode('utf-8')
         
