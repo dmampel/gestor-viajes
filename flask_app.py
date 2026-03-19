@@ -66,6 +66,18 @@ def formato_fecha(fecha_str):
         return fecha_str
 
 
+@app.template_filter('formato_hora_12h')
+def formato_hora_12h(hora_str):
+    """Convierte HH:MM (24h) a HH:MM am/pm (12h)."""
+    if not hora_str:
+        return ""
+    try:
+        dt = datetime.strptime(hora_str, '%H:%M')
+        return dt.strftime('%I:%M %p').lower()
+    except (ValueError, TypeError):
+        return hora_str
+
+
 @app.template_filter('formato_dia_amigable')
 def formato_dia_amigable(fecha_str):
     """Convierte YYYY-MM-DD a 'Lunes 16'."""
@@ -190,7 +202,7 @@ def viajes():
     ultimos_viajes = {}
     for c in clientes_activos:
         ultimo = db.execute('''
-            SELECT salida, destino, monto 
+            SELECT salida, destino, monto, hora 
             FROM viajes 
             WHERE cliente_id = ? 
             ORDER BY id DESC LIMIT 1
@@ -199,7 +211,8 @@ def viajes():
             ultimos_viajes[c['id']] = {
                 'salida': ultimo['salida'],
                 'destino': ultimo['destino'],
-                'monto': ultimo['monto']
+                'monto': ultimo['monto'],
+                'hora': ultimo['hora']
             }
 
     db.close()
@@ -215,6 +228,7 @@ def crear_viaje():
     salida = request.form.get('salida', '').strip()
     destino = request.form.get('destino', '').strip()
     monto = request.form.get('monto', '0').strip()
+    hora = request.form.get('hora', '').strip()
 
     if cliente_id and salida and destino:
         try:
@@ -227,8 +241,8 @@ def crear_viaje():
         
         # Insertar el viaje (evento único)
         cursor.execute(
-            'INSERT INTO viajes (cliente_id, salida, destino, monto) VALUES (?, ?, ?, ?)',
-            (int(cliente_id), salida, destino, monto_num)
+            'INSERT INTO viajes (cliente_id, salida, destino, monto, hora) VALUES (?, ?, ?, ?, ?)',
+            (int(cliente_id), salida, destino, monto_num, hora)
         )
         viaje_id = cursor.lastrowid
         
@@ -251,6 +265,7 @@ def editar_viaje(id):
     salida = request.form.get('salida', '').strip()
     destino = request.form.get('destino', '').strip()
     monto = request.form.get('monto', '0').strip()
+    hora = request.form.get('hora', '').strip()
 
     if salida and destino:
         try:
@@ -260,8 +275,8 @@ def editar_viaje(id):
 
         db = get_db()
         db.execute(
-            'UPDATE viajes SET salida = ?, destino = ?, monto = ? WHERE id = ?',
-            (salida, destino, monto_num, id)
+            'UPDATE viajes SET salida = ?, destino = ?, monto = ?, hora = ? WHERE id = ?',
+            (salida, destino, monto_num, hora, id)
         )
         # Actualizar el monto en pagos NO pagados de este viaje
         db.execute(
@@ -313,12 +328,12 @@ def pagos():
 
     # Obtener pagos del mes (mostramos todos los existentes, incluso si el viaje se desactivó después)
     pagos_mes = db.execute('''
-        SELECT p.*, v.salida, v.destino, v.monto as viaje_monto, v.fecha_creacion, c.nombre as cliente_nombre
+        SELECT p.*, v.salida, v.destino, v.monto as viaje_monto, v.fecha_creacion, v.hora, c.nombre as cliente_nombre
         FROM pagos p
         JOIN viajes v ON p.viaje_id = v.id
         JOIN clientes c ON v.cliente_id = c.id
         WHERE p.mes = ?
-        ORDER BY v.fecha_creacion DESC, v.id DESC
+        ORDER BY v.fecha_creacion DESC, v.hora DESC, v.id DESC
     ''', (mes,)).fetchall()
 
     # Calcular resumen
@@ -328,6 +343,17 @@ def pagos():
 
     db.close()
 
+    # Fecha y hora actual formateada (ej: Jueves 19, 4:10 pm)
+    ahora = datetime.now()
+    dias = {
+        'Monday': 'Lunes', 'Tuesday': 'Martes', 'Wednesday': 'Miércoles',
+        'Thursday': 'Jueves', 'Friday': 'Viernes', 'Saturday': 'Sábado',
+        'Sunday': 'Domingo'
+    }
+    dia_nombre = dias.get(ahora.strftime('%A'), ahora.strftime('%A'))
+    hora_str = ahora.strftime('%I:%M %p').lower()
+    fecha_hoy = f"{dia_nombre} {ahora.day}, {hora_str}"
+
     return render_template('pagos.html',
                            pagos=pagos_mes,
                            mes=mes,
@@ -336,7 +362,8 @@ def pagos():
                            mes_sig=mes_siguiente(mes),
                            total=total,
                            cobrado=cobrado,
-                           pendiente=pendiente)
+                           pendiente=pendiente,
+                           fecha_hoy=fecha_hoy)
 
 
 @app.route('/pagos/toggle', methods=['POST'])
@@ -371,6 +398,25 @@ def update_turno():
     if pago_id and nuevo_turno:
         db = get_db()
         db.execute('UPDATE pagos SET turno = ? WHERE id = ?', (nuevo_turno, pago_id))
+        db.commit()
+        db.close()
+        return {"status": "success"}, 200
+    
+    return {"status": "error"}, 400
+
+
+@app.route('/pagos/update_status', methods=['POST'])
+def update_status():
+    data = request.get_json()
+    pago_id = data.get('pago_id')
+    nuevo_estado = data.get('nuevo_estado')
+
+    if pago_id is not None and nuevo_estado is not None:
+        db = get_db()
+        # Si se marca como pagado (1), guardamos la fecha actual. Si no, queda vacía.
+        fecha = datetime.now().strftime('%Y-%m-%d %H:%M') if int(nuevo_estado) else None
+        db.execute('UPDATE pagos SET pagado = ?, fecha_pago = ? WHERE id = ?',
+                   (int(nuevo_estado), fecha, pago_id))
         db.commit()
         db.close()
         return {"status": "success"}, 200

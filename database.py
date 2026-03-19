@@ -46,6 +46,12 @@ def init_db():
     except sqlite3.OperationalError:
         pass  # La columna ya existe
 
+    # Migración: agregar hora si no existe
+    try:
+        cursor.execute("ALTER TABLE viajes ADD COLUMN hora TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass  # La columna ya existe
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS pagos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

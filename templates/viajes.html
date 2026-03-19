@@ -23,6 +23,7 @@
     </div>
     <div class="form-row">
         <input type="number" name="monto" placeholder="Monto $" step="100" min="0" required class="input-field" id="input-monto">
+        <input type="time" name="hora" required class="input-field" id="input-hora">
     </div>
     <button type="submit" class="btn-primary" id="btn-agregar-viaje">+ Agregar viaje</button>
 </form>
@@ -52,7 +53,7 @@
             <div class="viaje-meta">
                 <div style="display: flex; flex-direction: column; gap: 2px;">
                     <span class="viaje-monto">${{ viaje.monto|formato_pesos }}</span>
-                    <span class="pago-fecha" style="font-size: 0.65rem;">📅 {{ viaje.fecha_creacion|formato_fecha }}</span>
+                    <span class="pago-fecha" style="font-size: 0.65rem;">📅 {{ viaje.fecha_creacion|formato_fecha }} {% if viaje.hora %}- {{ viaje.hora | formato_hora_12h }}{% endif %}</span>
                 </div>
                 <div class="viaje-acciones">
                     <button type="button" class="btn-icon btn-sm" onclick="toggleEditViaje({{ viaje.id }})">✏️</button>
@@ -72,6 +73,7 @@
                 </div>
                 <div class="form-row">
                     <input type="number" name="monto" value="{{ viaje.monto }}" step="100" min="0" required class="input-field">
+                    <input type="time" name="hora" value="{{ viaje.hora }}" required class="input-field">
                 </div>
                 <div class="form-row">
                     <button type="submit" class="btn-guardar">Guardar</button>
@@ -97,6 +99,7 @@ const selectCliente = document.getElementById('select-cliente');
 const inputSalida = document.getElementById('input-salida');
 const inputDestino = document.getElementById('input-destino');
 const inputMonto = document.getElementById('input-monto');
+const inputHora = document.getElementById('input-hora');
 
 if (selectCliente) {
     selectCliente.addEventListener('change', function() {
@@ -108,11 +111,13 @@ if (selectCliente) {
             inputSalida.value = ultimo.salida;
             inputDestino.value = ultimo.destino;
             inputMonto.value = ultimo.monto;
+            if (ultimo.hora) inputHora.value = ultimo.hora;
         } else {
             // Si es un cliente nuevo sin viajes, limpiar los campos
             inputSalida.value = '';
             inputDestino.value = '';
             inputMonto.value = '';
+            inputHora.value = '';
         }
     });
 }

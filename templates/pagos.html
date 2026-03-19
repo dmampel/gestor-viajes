@@ -25,117 +25,97 @@
 </div>
 
 <div class="board-pagos">
-    <!-- 📥 Sin Asignar -->
-    <div class="pago-column" id="col-sin_asignar">
+    <h2 class="fecha-hoy-mini">
+        {{ fecha_hoy }}
+    </h2>
+    <!-- ⏳ No Pagados -->
+    <div class="pago-column" id="col-pendientes">
         <div class="column-header">
-            <span class="column-icon">📥</span>
-            <span class="column-title">Sin Asignar</span>
+            <span class="column-icon">⏳</span>
+            <span class="column-title">Pendientes</span>
         </div>
-        <div class="cards-container" data-turno="sin_asignar">
-            {% for pago in pagos if pago.turno == 'sin_asignar' or not pago.turno %}
-                {% include 'partial_pago_card.html' %}
+
+        <div class="cards-container" data-status="0">
+            {% for pago in pagos if not pago.pagado %}
+            {% include 'partial_pago_card.html' %}
             {% endfor %}
         </div>
     </div>
 
-    <!-- 🌅 Mañana -->
-    <div class="pago-column" id="col-manana">
+    <!-- ✅ Pagados -->
+    <div class="pago-column" id="col-pagados">
         <div class="column-header">
-            <span class="column-icon">🌅</span>
-            <span class="column-title">Mañana / 7:00am - 12:00pm</span>
+            <span class="column-icon">✅</span>
+            <span class="column-title">Viajes Pagados</span>
         </div>
-        <div class="cards-container" data-turno="manana">
-            {% for pago in pagos if pago.turno == 'manana' %}
-                {% include 'partial_pago_card.html' %}
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- ☀️ Tarde -->
-    <div class="pago-column" id="col-tarde">
-        <div class="column-header">
-            <span class="column-icon">☀️</span>
-            <span class="column-title">Tarde / 12:00pm - 6:00pm</span>
-        </div>
-        <div class="cards-container" data-turno="tarde">
-            {% for pago in pagos if pago.turno == 'tarde' %}
-                {% include 'partial_pago_card.html' %}
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- 🌙 Noche -->
-    <div class="pago-column" id="col-noche">
-        <div class="column-header">
-            <span class="column-icon">🌙</span>
-            <span class="column-title">Noche / 6:00pm - 12:00am</span>
-        </div>
-        <div class="cards-container" data-turno="noche">
-            {% for pago in pagos if pago.turno == 'noche' %}
-                {% include 'partial_pago_card.html' %}
+        <div class="cards-container" data-status="1">
+            {% for pago in pagos if pago.pagado %}
+            {% include 'partial_pago_card.html' %}
             {% endfor %}
         </div>
     </div>
 </div>
 
 {% if not pagos %}
-    <div class="empty-state">
-        <p>No hay viajes activos.</p>
-        <a href="{{ url_for('viajes') }}" class="btn-primary">Agregar viajes</a>
-    </div>
+<div class="empty-state">
+    <p>No hay viajes activos.</p>
+    <a href="{{ url_for('viajes') }}" class="btn-primary">Agregar viajes</a>
+</div>
 {% endif %}
 
 <!-- Sortable.js -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const containers = document.querySelectorAll('.cards-container');
-        
+
         containers.forEach(container => {
             new Sortable(container, {
                 group: 'pagos',
                 animation: 150,
                 ghostClass: 'sortable-ghost',
                 dragClass: 'sortable-drag',
-                forceFallback: true, // Mejor para móviles
-                delay: 100, // Prevenir arrastre accidental
+                forceFallback: true,
+                delay: 100,
                 delayOnTouchOnly: true,
-                onStart: function() {
+                onStart: function () {
                     document.body.classList.add('grabbing');
                 },
-                onEnd: function(evt) {
+                onEnd: function (evt) {
                     document.body.classList.remove('grabbing');
                     const itemEl = evt.item;
                     const targetContainer = evt.to;
-                    const nuevoTurno = targetContainer.getAttribute('data-turno');
+                    const nuevoEstado = targetContainer.getAttribute('data-status');
                     const pagoId = itemEl.getAttribute('data-pago-id');
-                    
+
                     if (evt.from !== evt.to) {
-                        // Guardado automático
-                        fetch('/pagos/update_turno', {
+                        // Guardado automático del nuevo estado
+                        fetch('/pagos/update_status', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
                                 pago_id: pagoId,
-                                nuevo_turno: nuevoTurno
+                                nuevo_estado: nuevoEstado
                             })
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                console.log('Turno actualizado:', nuevoTurno);
-                            } else {
-                                alert('Error al guardar el cambio');
-                                location.reload(); // Recargar si falla
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Error de conexión');
-                            location.reload();
-                        });
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    console.log('Estado actualizado:', nuevoEstado);
+                                    // Recargamos para actualizar los colores de las cards y los resúmenes superiores
+                                    location.reload();
+                                } else {
+                                    alert('Error al guardar el cambio');
+                                    location.reload();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Error de conexión');
+                                location.reload();
+                            });
                     }
                 }
             });

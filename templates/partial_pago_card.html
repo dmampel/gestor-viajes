@@ -10,7 +10,7 @@
         <div class="pago-info">
             <span class="pago-nombre">{{ pago.cliente_nombre|cap_palabras }}</span>
             <span class="pago-ruta">{{ pago.salida|cap_palabras }} → {{ pago.destino|cap_palabras }}</span>
-            <span class="pago-fecha">📅 {{ pago.fecha_creacion|formato_dia_amigable }}</span>
+            <span class="pago-fecha">📅 {{ pago.fecha_creacion|formato_dia_amigable }} {% if pago.hora %}- {{ pago.hora | formato_hora_12h }}{% endif %}</span>
             <span class="pago-monto">${{ pago.monto|formato_pesos }}</span>
         </div>
         <div class="pago-estado">

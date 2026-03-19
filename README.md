@@ -4,10 +4,11 @@ Sistema de gestión para servicios de transporte y logística, diseñado para or
 
 ## 🚀 Características Principales
 
-- **Tablero de Pagos Inteligente**: Organiza los viajes del día en franjas horarias (Mañana, Tarde, Noche) mediante un sistema de **arrastrar y soltar (Drag-and-Drop)**.
-- **Gestión de Clientes**: Registro de clientes con seguimiento de estado (Activos/Inactivos).
+- **Tablero de Pagos Inteligente**: Gestión simplificada de cobros dividida en **No Pagados** y **Pagados**, con sistema de **arrastrar y soltar (Drag-and-Drop)** para actualizar estados en tiempo real.
+- **Seguimiento de Hora Exacta**: Registro de la hora específica para cada viaje con visualización automática en formato **12h (am/pm)**.
+- **Gestión de Clientes**: Registro detallado de clientes con seguimiento de estado (Activos/Inactivos).
 - **Log de Viajes**: Registro histórico de rutas y montos, con autocompletado inteligente basado en el último viaje realizado.
-- **Historial de Cobros**: Visualización mensual del progreso de cobros y estados de pago.
+- **Historial de Cobros**: Resumen mensual de ingresos cobrados, pendientes y totales para un control financiero total.
 - **Despliegue Automático**: Integración total con GitHub y PythonAnywhere para actualizaciones en tiempo real.
 
 ## 🛠️ Tecnologías Utilizadas
