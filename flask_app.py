@@ -3,9 +3,16 @@ from database import get_db, init_db
 
 # Inicializar Base de Datos al arrancar (incluyendo migraciones)
 init_db()
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 import os
 import subprocess
+
+# Configuración de zona horaria (Argentina GMT-3)
+ARG_TZ = timezone(timedelta(hours=-3))
+
+def get_ahora():
+    """Devuelve la fecha y hora actual en la zona horaria de Argentina."""
+    return datetime.now(ARG_TZ)
 
 app = Flask(__name__)
 app.secret_key = 'dixi_viajes_secret_key'
@@ -14,7 +21,7 @@ app.secret_key = 'dixi_viajes_secret_key'
 
 def mes_actual():
     """Devuelve el mes actual en formato YYYY-MM."""
-    return date.today().strftime('%Y-%m')
+    return get_ahora().strftime('%Y-%m')
 
 
 def nombre_mes(mes_str):
@@ -243,9 +250,10 @@ def crear_viaje():
         cursor = db.cursor()
         
         # Insertar el viaje (evento único)
+        fecha_creacion = get_ahora().strftime('%Y-%m-%d')
         cursor.execute(
-            'INSERT INTO viajes (cliente_id, salida, destino, monto, hora) VALUES (?, ?, ?, ?, ?)',
-            (int(cliente_id), salida, destino, monto_num, hora)
+            'INSERT INTO viajes (cliente_id, salida, destino, monto, hora, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?)',
+            (int(cliente_id), salida, destino, monto_num, hora, fecha_creacion)
         )
         viaje_id = cursor.lastrowid
         
@@ -347,7 +355,7 @@ def pagos():
     db.close()
 
     # Fecha y hora actual formateada (ej: Jueves 19, 4:10 pm)
-    ahora = datetime.now()
+    ahora = get_ahora()
     dias = {
         'Monday': 'Lunes', 'Tuesday': 'Martes', 'Wednesday': 'Miércoles',
         'Thursday': 'Jueves', 'Friday': 'Viernes', 'Saturday': 'Sábado',
@@ -378,7 +386,7 @@ def toggle_pago():
     pago = db.execute('SELECT pagado FROM pagos WHERE id = ?', (pago_id,)).fetchone()
     if pago:
         nuevo_estado = 0 if pago['pagado'] else 1
-        fecha = datetime.now().strftime('%Y-%m-%d %H:%M') if nuevo_estado else None
+        fecha = get_ahora().strftime('%Y-%m-%d %H:%M') if nuevo_estado else None
         db.execute('UPDATE pagos SET pagado = ?, fecha_pago = ? WHERE id = ?',
                    (nuevo_estado, fecha, pago_id))
         db.commit()
@@ -417,7 +425,7 @@ def update_status():
     if pago_id is not None and nuevo_estado is not None:
         db = get_db()
         # Si se marca como pagado (1), guardamos la fecha actual. Si no, queda vacía.
-        fecha = datetime.now().strftime('%Y-%m-%d %H:%M') if int(nuevo_estado) else None
+        fecha = get_ahora().strftime('%Y-%m-%d %H:%M') if int(nuevo_estado) else None
         db.execute('UPDATE pagos SET pagado = ?, fecha_pago = ? WHERE id = ?',
                    (int(nuevo_estado), fecha, pago_id))
         db.commit()
