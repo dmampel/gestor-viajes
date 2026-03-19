@@ -21,7 +21,7 @@
         <span class="arrow-icon">→</span>
         <input type="text" name="destino" placeholder="Destino (ej: Colegio)" required class="input-field" id="input-destino">
     </div>
-    <div class="form-row">
+    <div class="form-row" style="align-items: flex-start;">
         <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
             <input type="date" name="fecha" value="{{ hoy }}" required class="input-field" id="input-fecha">
             <div class="date-shortcuts">
@@ -80,7 +80,7 @@
                     <span class="arrow-icon">→</span>
                     <input type="text" name="destino" value="{{ viaje.destino }}" required class="input-field">
                 </div>
-                <div class="form-row">
+                <div class="form-row" style="align-items: flex-start;">
                     <input type="date" name="fecha" value="{{ viaje.fecha_creacion }}" required class="input-field">
                     <input type="time" name="hora" value="{{ viaje.hora }}" required class="input-field">
                 </div>
