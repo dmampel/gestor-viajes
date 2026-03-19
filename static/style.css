@@ -485,6 +485,34 @@ select.input-field option {
     opacity: 0.9;
 }
 
+/* Shortcuts */
+.date-shortcuts {
+    display: flex;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.btn-shortcut {
+    background: var(--bg-card-hover);
+    border: 1px solid var(--borde);
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-shortcut:active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent-light);
+    transform: scale(0.95);
+}
+
 /* ===== Lista Clientes ===== */
 .lista-clientes {
     display: flex;

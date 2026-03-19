@@ -225,11 +225,17 @@ def viajes():
                 'hora': ultimo['hora']
             }
 
+    ahora = get_ahora()
+    hoy_str = ahora.strftime('%Y-%m-%d')
+    manana_str = (ahora + timedelta(days=1)).strftime('%Y-%m-%d')
+
     db.close()
     return render_template('viajes.html', 
                            viajes=lista, 
                            clientes=clientes_activos,
-                           ultimos_viajes=ultimos_viajes)
+                           ultimos_viajes=ultimos_viajes,
+                           hoy=hoy_str,
+                           manana=manana_str)
 
 
 @app.route('/viajes/nuevo', methods=['POST'])
@@ -239,6 +245,10 @@ def crear_viaje():
     destino = request.form.get('destino', '').strip()
     monto = request.form.get('monto', '0').strip()
     hora = request.form.get('hora', '').strip()
+    fecha_viaje = request.form.get('fecha', '').strip()
+
+    if not fecha_viaje:
+        fecha_viaje = get_ahora().strftime('%Y-%m-%d')
 
     if cliente_id and salida and destino:
         try:
@@ -250,17 +260,19 @@ def crear_viaje():
         cursor = db.cursor()
         
         # Insertar el viaje (evento único)
-        fecha_creacion = get_ahora().strftime('%Y-%m-%d')
         cursor.execute(
             'INSERT INTO viajes (cliente_id, salida, destino, monto, hora, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?)',
-            (int(cliente_id), salida, destino, monto_num, hora, fecha_creacion)
+            (int(cliente_id), salida, destino, monto_num, hora, fecha_viaje)
         )
         viaje_id = cursor.lastrowid
         
-        # Crear el pago para el mes actual inmediatamente
+        # El mes del pago se deriva de la fecha del viaje
+        mes_viaje = fecha_viaje[:7] # YYYY-MM
+        
+        # Crear el pago para el mes del viaje inmediatamente
         db.execute(
             'INSERT INTO pagos (viaje_id, mes, monto, pagado) VALUES (?, ?, ?, 0)',
-            (viaje_id, mes_actual(), monto_num)
+            (viaje_id, mes_viaje, monto_num)
         )
         
         db.commit()
@@ -277,6 +289,7 @@ def editar_viaje(id):
     destino = request.form.get('destino', '').strip()
     monto = request.form.get('monto', '0').strip()
     hora = request.form.get('hora', '').strip()
+    fecha_viaje = request.form.get('fecha', '').strip()
 
     if salida and destino:
         try:
@@ -285,10 +298,25 @@ def editar_viaje(id):
             monto_num = 0
 
         db = get_db()
-        db.execute(
-            'UPDATE viajes SET salida = ?, destino = ?, monto = ?, hora = ? WHERE id = ?',
-            (salida, destino, monto_num, hora, id)
-        )
+        
+        # Actualizar viaje
+        if fecha_viaje:
+            db.execute(
+                'UPDATE viajes SET salida = ?, destino = ?, monto = ?, hora = ?, fecha_creacion = ? WHERE id = ?',
+                (salida, destino, monto_num, hora, fecha_viaje, id)
+            )
+            # También actualizar el mes en el pago si no está pagado
+            mes_viaje = fecha_viaje[:7]
+            db.execute(
+                'UPDATE pagos SET mes = ? WHERE viaje_id = ? AND pagado = 0',
+                (mes_viaje, id)
+            )
+        else:
+            db.execute(
+                'UPDATE viajes SET salida = ?, destino = ?, monto = ?, hora = ? WHERE id = ?',
+                (salida, destino, monto_num, hora, id)
+            )
+            
         # Actualizar el monto en pagos NO pagados de este viaje
         db.execute(
             'UPDATE pagos SET monto = ? WHERE viaje_id = ? AND pagado = 0',

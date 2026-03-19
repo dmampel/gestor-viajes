@@ -22,8 +22,17 @@
         <input type="text" name="destino" placeholder="Destino (ej: Colegio)" required class="input-field" id="input-destino">
     </div>
     <div class="form-row">
-        <input type="number" name="monto" placeholder="Monto $" step="100" min="0" required class="input-field" id="input-monto">
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+            <input type="date" name="fecha" value="{{ hoy }}" required class="input-field" id="input-fecha">
+            <div class="date-shortcuts">
+                <button type="button" class="btn-shortcut" onclick="setFecha('{{ hoy }}')">Hoy</button>
+                <button type="button" class="btn-shortcut" onclick="setFecha('{{ manana }}')">Mañana</button>
+            </div>
+        </div>
         <input type="time" name="hora" required class="input-field" id="input-hora">
+    </div>
+    <div class="form-row">
+        <input type="number" name="monto" placeholder="Monto $" step="100" min="0" required class="input-field" id="input-monto">
     </div>
     <button type="submit" class="btn-primary" id="btn-agregar-viaje">+ Agregar viaje</button>
 </form>
@@ -72,8 +81,11 @@
                     <input type="text" name="destino" value="{{ viaje.destino }}" required class="input-field">
                 </div>
                 <div class="form-row">
-                    <input type="number" name="monto" value="{{ viaje.monto }}" step="100" min="0" required class="input-field">
+                    <input type="date" name="fecha" value="{{ viaje.fecha_creacion }}" required class="input-field">
                     <input type="time" name="hora" value="{{ viaje.hora }}" required class="input-field">
+                </div>
+                <div class="form-row">
+                    <input type="number" name="monto" value="{{ viaje.monto }}" step="100" min="0" required class="input-field">
                 </div>
                 <div class="form-row">
                     <button type="submit" class="btn-guardar">Guardar</button>
@@ -100,6 +112,8 @@ const inputSalida = document.getElementById('input-salida');
 const inputDestino = document.getElementById('input-destino');
 const inputMonto = document.getElementById('input-monto');
 const inputHora = document.getElementById('input-hora');
+const inputFecha = document.getElementById('input-fecha');
+const hoy = "{{ hoy }}";
 
 if (selectCliente) {
     selectCliente.addEventListener('change', function() {
@@ -112,14 +126,20 @@ if (selectCliente) {
             inputDestino.value = ultimo.destino;
             inputMonto.value = ultimo.monto;
             if (ultimo.hora) inputHora.value = ultimo.hora;
+            inputFecha.value = hoy; // Resetear a hoy al cambiar de cliente
         } else {
             // Si es un cliente nuevo sin viajes, limpiar los campos
             inputSalida.value = '';
             inputDestino.value = '';
             inputMonto.value = '';
             inputHora.value = '';
+            inputFecha.value = hoy;
         }
     });
+}
+
+function setFecha(fecha) {
+    document.getElementById('input-fecha').value = fecha;
 }
 
 function toggleEditViaje(id) {

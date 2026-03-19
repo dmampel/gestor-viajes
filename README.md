@@ -8,6 +8,7 @@ Sistema de gestión para servicios de transporte y logística, diseñado para or
 - **Seguimiento de Hora Exacta**: Registro de la hora específica para cada viaje con visualización automática en formato **12h (am/pm)**.
 - **Gestión de Clientes**: Registro detallado de clientes con seguimiento de estado (Activos/Inactivos).
 - **Log de Viajes**: Registro histórico de rutas y montos, con autocompletado inteligente basado en el último viaje realizado.
+- **Selección de Fecha Flexible**: Registro de viajes para hoy, mañana o cualquier fecha futura, con botones de acceso rápido (Hoy/Mañana) optimizados para el uso ágil desde el iPhone.
 - **Historial de Cobros**: Resumen mensual de ingresos cobrados, pendientes y totales para un control financiero total.
 - **Despliegue Automático**: Integración total con GitHub y PythonAnywhere para actualizaciones en tiempo real.
 
