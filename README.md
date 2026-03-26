@@ -8,6 +8,7 @@ Sistema de gestión para servicios de transporte y logística, diseñado para or
 - **Seguimiento de Hora Exacta**: Registro de la hora específica para cada viaje con visualización automática en formato **12h (am/pm)**.
 - **Gestión de Clientes**: Registro detallado de clientes con seguimiento de estado (Activos/Inactivos).
 - **Log de Viajes**: Registro histórico de rutas y montos, con autocompletado inteligente basado en el último viaje realizado.
+- **Intercambio Rápido de Rutas**: Botón de acceso rápido (⇄) para invertir automáticamente la Salida y el Destino, ideal para cargar viajes de ida y vuelta.
 - **Selección de Fecha Flexible**: Registro de viajes para hoy, mañana o cualquier fecha futura, con botones de acceso rápido (Hoy/Mañana) optimizados para el uso ágil desde el iPhone.
 - **Historial de Cobros**: Resumen mensual de ingresos cobrados, pendientes y totales para un control financiero total.
 - **Despliegue Automático**: Integración total con GitHub y PythonAnywhere para actualizaciones en tiempo real.
@@ -35,7 +36,7 @@ Sistema de gestión para servicios de transporte y logística, diseñado para or
    ```bash
    python flask_app.py
    ```
-4. Acceder en el navegador a: `http://127.0.0.1:5000`
+4. Acceder en el navegador a: `http://127.0.0.1:5001`
 
 ## ☁️ Despliegue (CI/CD)
 
