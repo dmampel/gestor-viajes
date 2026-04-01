@@ -24,6 +24,49 @@
     </div>
 </div>
 
+{% if pagos %}
+{# Calcular deuda por cliente (solo pendientes), incluyendo IDs #}
+{% set ns = namespace(deuda={}) %}
+{% for pago in pagos if not pago.pagado %}
+    {% if pago.cliente_nombre not in ns.deuda %}
+        {% set _ = ns.deuda.update({pago.cliente_nombre: {'monto': 0, 'viajes': 0, 'ids': ''}}) %}
+    {% endif %}
+    {% set entrada = ns.deuda[pago.cliente_nombre] %}
+    {% set nuevos_ids = (entrada.ids ~ ',' ~ pago.id) if entrada.ids else (pago.id | string) %}
+    {% set _ = ns.deuda.update({pago.cliente_nombre: {'monto': entrada.monto + pago.monto, 'viajes': entrada.viajes + 1, 'ids': nuevos_ids}}) %}
+{% endfor %}
+
+{% if ns.deuda %}
+<div class="deuda-clientes" id="deuda-clientes">
+    <button class="deuda-toggle" onclick="toggleDeuda()" id="btn-deuda">
+        <span>👥 Deuda por cliente</span>
+        <span class="deuda-toggle-icon" id="deuda-icon">▾</span>
+    </button>
+    <div class="deuda-lista" id="deuda-lista">
+        {% for nombre, datos in ns.deuda | dictsort %}
+        <div class="deuda-cliente-row">
+            <div class="deuda-cliente-info">
+                <span class="deuda-nombre">{{ nombre | cap_palabras }}</span>
+                <span class="deuda-viajes">{{ datos.viajes }} viaje{{ 's' if datos.viajes != 1 }}</span>
+            </div>
+            <div class="deuda-acciones">
+                <span class="deuda-monto">${{ datos.monto | formato_pesos }}</span>
+                <form method="POST" action="{{ url_for('generar_orden') }}" style="display:inline;">
+                    <input type="hidden" name="mes" value="{{ mes }}">
+                    {% for pid in datos.ids.split(',') %}
+                    <input type="hidden" name="pago_ids" value="{{ pid }}">
+                    {% endfor %}
+                    <button type="submit" class="btn-orden-mini" title="Generar orden de pago para {{ nombre | cap_palabras }}">📄 Orden de Pago</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endif %}
+
+
 <div class="board-pagos">
     <h2 class="fecha-hoy-mini">
         {{ fecha_hoy }}
@@ -62,6 +105,7 @@
     <a href="{{ url_for('viajes') }}" class="btn-primary">Agregar viajes</a>
 </div>
 {% endif %}
+
 
 <!-- Sortable.js -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -136,5 +180,22 @@
             location.reload(); // Por ahora recargamos para actualizar resúmenes
         });
     }
+
+
+    function toggleDeuda() {
+        const lista = document.getElementById('deuda-lista');
+        const icon = document.getElementById('deuda-icon');
+        const abierto = lista.style.maxHeight && lista.style.maxHeight !== '0px';
+        if (abierto) {
+            lista.style.maxHeight = '0px';
+            lista.style.opacity = '0';
+            icon.textContent = '▾';
+        } else {
+            lista.style.maxHeight = lista.scrollHeight + 'px';
+            lista.style.opacity = '1';
+            icon.textContent = '▴';
+        }
+    }
+
 </script>
 {% endblock %}

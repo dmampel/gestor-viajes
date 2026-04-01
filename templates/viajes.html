@@ -68,6 +68,8 @@
                     <span class="pago-fecha" style="font-size: 0.65rem;">📅 {{ viaje.fecha_creacion|formato_fecha }} {% if viaje.hora %}- {{ viaje.hora | formato_hora_12h }}{% endif %}</span>
                 </div>
                 <div class="viaje-acciones">
+                    <button type="button" class="btn-icon btn-sm" title="Repetir viaje"
+                        onclick="repetirViaje({{ viaje.cliente_id }}, '{{ viaje.salida }}', '{{ viaje.destino }}', {{ viaje.monto }}, '{{ viaje.hora }}')">🔁</button>
                     <button type="button" class="btn-icon btn-sm" onclick="toggleEditViaje({{ viaje.id }})">✏️</button>
                     <form method="POST" action="{{ url_for('eliminar_viaje', id=viaje.id) }}" style="display:inline">
                         <button type="submit" class="btn-icon btn-sm">🗑️</button>
@@ -158,6 +160,25 @@ function swapDestinos() {
     const temp = inputSalida.value;
     inputSalida.value = inputDestino.value;
     inputDestino.value = temp;
+}
+
+function repetirViaje(clienteId, salida, destino, monto, hora) {
+    // Seleccionar cliente
+    if (selectCliente) {
+        selectCliente.value = clienteId;
+    }
+    // Rellenar campos
+    inputSalida.value = salida;
+    inputDestino.value = destino;
+    inputMonto.value = monto;
+    if (hora) inputHora.value = hora;
+    inputFecha.value = hoy; // Fecha en hoy por defecto
+
+    // Scroll suave al formulario y destacarlo brevemente
+    const form = document.getElementById('form-nuevo-viaje');
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    form.classList.add('form-highlight');
+    setTimeout(() => form.classList.remove('form-highlight'), 1200);
 }
 </script>
 {% endblock %}

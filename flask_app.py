@@ -463,6 +463,54 @@ def update_status():
     return {"status": "error"}, 400
 
 
+@app.route('/pagos/orden', methods=['POST'])
+def generar_orden():
+    pago_ids = request.form.getlist('pago_ids')
+    mes = request.form.get('mes', mes_actual())
+
+    if not pago_ids:
+        flash('⚠️ Seleccioná al menos un viaje')
+        return redirect(url_for('pagos', mes=mes))
+
+    db = get_db()
+    placeholders = ','.join('?' * len(pago_ids))
+    pagos_sel = db.execute(f'''
+        SELECT p.id, p.monto, p.mes,
+               v.salida, v.destino, v.hora, v.fecha_creacion,
+               c.nombre as cliente_nombre
+        FROM pagos p
+        JOIN viajes v ON p.viaje_id = v.id
+        JOIN clientes c ON v.cliente_id = c.id
+        WHERE p.id IN ({placeholders})
+        ORDER BY c.nombre ASC, v.fecha_creacion ASC, v.hora ASC
+    ''', pago_ids).fetchall()
+    db.close()
+
+    # Agrupar por cliente
+    clientes_orden = {}
+    for p in pagos_sel:
+        nombre = p['cliente_nombre']
+        if nombre not in clientes_orden:
+            clientes_orden[nombre] = {'viajes': [], 'total': 0}
+        clientes_orden[nombre]['viajes'].append(p)
+        clientes_orden[nombre]['total'] += p['monto']
+
+    total_general = sum(p['monto'] for p in pagos_sel)
+    ahora = get_ahora()
+    fecha_emision = ahora.strftime('%d/%m/%Y')
+    hora_emision = ahora.strftime('%H:%M')
+
+    return render_template('orden.html',
+                           clientes_orden=clientes_orden,
+                           total_general=total_general,
+                           fecha_emision=fecha_emision,
+                           hora_emision=hora_emision,
+                           mes=mes,
+                           nombre_mes=nombre_mes(mes))
+
+
+
+
 # =====================
 # HISTORIAL
 # =====================

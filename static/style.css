@@ -205,6 +205,110 @@ body.grabbing, body.grabbing * {
     color: var(--amarillo);
 }
 
+/* ===== Deuda por cliente ===== */
+.deuda-clientes {
+    margin-top: 12px;
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--borde);
+    overflow: hidden;
+}
+
+.deuda-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.deuda-toggle:active {
+    color: var(--accent-light);
+}
+
+.deuda-toggle-icon {
+    font-size: 1rem;
+    color: var(--accent-light);
+    transition: transform 0.25s;
+}
+
+.deuda-lista {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+    padding: 0 14px;
+}
+
+.deuda-cliente-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-top: 1px solid var(--borde);
+}
+
+.deuda-cliente-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.deuda-nombre {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.deuda-viajes {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+}
+
+.deuda-monto {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--rojo);
+}
+
+.deuda-acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-orden-mini {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
+}
+
+.btn-orden-mini:active {
+    transform: scale(0.95);
+    opacity: 0.85;
+}
+
+
+
 /* ===== Lista de Pagos (Board Style) ===== */
 .board-pagos {
     display: grid;
@@ -410,6 +514,18 @@ body.grabbing {
     padding: 16px;
     margin-bottom: 20px;
     border: 1px solid var(--borde);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-nuevo.form-highlight {
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.2);
+    animation: highlight-pulse 1.2s ease-out forwards;
+}
+
+@keyframes highlight-pulse {
+    0%   { box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.35); }
+    100% { box-shadow: 0 0 0 0px rgba(162, 155, 254, 0); }
 }
 
 .form-row {
@@ -688,7 +804,8 @@ select.input-field option {
     gap: 6px;
 }
 
-/* ===== Historial ===== */
+
+
 .lista-historial {
     display: flex;
     flex-direction: column;
