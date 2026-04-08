@@ -14,6 +14,8 @@ Sistema de gestión para servicios de transporte y logística, diseñado para or
 - **Intercambio Rápido de Rutas**: Botón ⇄ para invertir automáticamente la Salida y el Destino, ideal para cargas de viajes de ida y vuelta.
 - **Selección de Fecha Flexible**: Registro de viajes para hoy, mañana o cualquier fecha futura, con botones de acceso rápido optimizados para uso desde el iPhone.
 - **Historial de Cobros**: Resumen mensual de ingresos cobrados, pendientes y totales para un control financiero completo.
+- **Accesibilidad Multi-Dispositivo**: Diseño adaptable tanto para celular (Mobile First) con barra de navegación inferior interactiva, inteligente como para monitor de Escritorio adaptándose usando distribuciones nativas con CSS Grid.
+- **Modo Portfolio (Seguridad de Datos)**: Incluye un novedoso sistema de entrada bifurcada sin registro de usuario, donde los dueños inician sesión a una base de datos original resguardada, pero visitantes de GitHub y reclutadores entran como observadores con una base de datos ficticia clonada (`demo.db`).
 - **Despliegue Automático**: Integración con GitHub y PythonAnywhere para actualizaciones en tiempo real.
 
 ## 🛠️ Tecnologías Utilizadas
