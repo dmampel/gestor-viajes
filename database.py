@@ -1,10 +1,17 @@
 import sqlite3
 import os
 
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'datos.db')
-
-
 def get_db():
+    try:
+        from flask import session, has_request_context
+        if has_request_context() and session.get('role') == 'demo':
+            db_name = 'demo.db'
+        else:
+            db_name = 'datos.db'
+    except ImportError:
+        db_name = 'datos.db'
+
+    DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), db_name)
     """Obtiene una conexión a la base de datos."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row

@@ -14,8 +14,14 @@
 
 <body>
     <div class="app-container">
-        <header class="app-header">
-            <h1>Gestión de Viajes</h1>
+        <header class="app-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <h1></h1>
+            <h1 style="margin:0;">Gestión de Viajes</h1>
+            {% if session.get('role') %}
+            <a href="{{ url_for('logout') }}" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem; padding: 4px 8px; border: 1px solid var(--borde); border-radius:4px;">Salir</a>
+            {% else %}
+            <div></div>
+            {% endif %}
         </header>
 
         <main class="app-content">

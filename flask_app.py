@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from database import get_db, init_db
 
 # Inicializar Base de Datos al arrancar (incluyendo migraciones)
@@ -16,6 +16,36 @@ def get_ahora():
 
 app = Flask(__name__)
 app.secret_key = 'dixi_viajes_secret_key'
+
+ADMIN_PASSWORD = os.environ.get('SECRET_PASS', 'dixi2026')
+
+@app.before_request
+def require_login():
+    allow_list = ['login', 'static', 'deploy']
+    if request.endpoint not in allow_list and request.endpoint is not None:
+        if not session.get('role'):
+            return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'demo':
+            session['role'] = 'demo'
+            return redirect(url_for('index'))
+        elif action == 'admin':
+            password = request.form.get('password')
+            if password == ADMIN_PASSWORD:
+                session['role'] = 'admin'
+                return redirect(url_for('index'))
+            else:
+                flash('Contraseña incorrecta')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 # --- Helpers ---
 
