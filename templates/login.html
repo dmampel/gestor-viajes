@@ -82,7 +82,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1 class="login-title">Control de Viajes 🚐</h1>
+        <h1 class="login-title">Control de Viajes</h1>
         
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -92,7 +92,7 @@
 
         <div class="demo-box">
             <h2 class="auth-heading">Entrar como Invitado</h2>
-            <p class="auth-desc">Entrá como visitante para explorar la plataforma con datos ficticios. No se pide clave.</p>
+            <p class="auth-desc">Acá podés explorar la plataforma con datos ficticios. No necesitás clave.</p>
             <form method="POST">
                 <input type="hidden" name="action" value="demo">
                 <button type="submit" class="btn-demo">Ver Demo</button>
