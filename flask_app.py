@@ -113,7 +113,7 @@ def formato_hora_12h(hora_str):
         return ""
     try:
         dt = datetime.strptime(hora_str, '%H:%M')
-        return dt.strftime('%I:%M %p').lower()
+        return dt.strftime('%I:%M %p').lower().lstrip('0')
     except (ValueError, TypeError):
         return hora_str
 
@@ -420,7 +420,7 @@ def pagos():
         'Sunday': 'Domingo'
     }
     dia_nombre = dias.get(ahora.strftime('%A'), ahora.strftime('%A'))
-    hora_str = ahora.strftime('%I:%M %p').lower()
+    hora_str = ahora.strftime('%I:%M %p').lower().lstrip('0')
     fecha_hoy = f"{dia_nombre} {ahora.day}, {hora_str}"
 
     return render_template('pagos.html',

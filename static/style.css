@@ -1114,6 +1114,7 @@ input[type=number] {
         max-width: 1200px;
         display: grid;
         grid-template-columns: 250px 1fr;
+        grid-template-rows: auto 1fr;
         grid-template-areas: 
             "sidebar header"
             "sidebar main";
@@ -1179,6 +1180,8 @@ input[type=number] {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
         gap: 15px;
+        align-items: start;
+        align-content: start;
     }
 
     .empty-state, .viaje-grupo-header, .fecha-hoy-mini {
