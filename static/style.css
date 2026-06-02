@@ -6,22 +6,33 @@
 }
 
 :root {
-    --bg: #0f1117;
-    --bg-card: #1a1d27;
-    --bg-card-hover: #222639;
-    --text: #e8e9ed;
-    --text-secondary: #8b8fa3;
-    --accent: #6c5ce7;
-    --accent-light: #a29bfe;
-    --verde: #00b894;
-    --verde-bg: rgba(0, 184, 148, 0.12);
-    --rojo: #ff6b6b;
-    --rojo-bg: rgba(255, 107, 107, 0.12);
-    --amarillo: #ffc048;
-    --borde: rgba(255, 255, 255, 0.06);
-    --radius: 14px;
-    --radius-sm: 10px;
-    --sombra: 0 4px 20px rgba(0, 0, 0, 0.3);
+    /* Backgrounds */
+    --bg: #f0f4f8;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+
+    /* Text */
+    --text: #0f172a;
+    --text-secondary: #64748b;
+
+    /* Primary: verde vibrante */
+    --accent: #16a34a;
+    --accent-light: #4ade80;
+
+    /* Semantic */
+    --verde: #16a34a;
+    --verde-bg: #dcfce7;
+    --rojo: #dc2626;
+    --rojo-bg: #fee2e2;
+    --amarillo: #d97706;
+    --amarillo-bg: #fef3c7;
+
+    /* Borders */
+    --borde: rgba(15, 23, 42, 0.08);
+    --radius: 20px;
+    --radius-sm: 14px;
+    --sombra: 0 2px 16px rgba(15, 23, 42, 0.08);
+    --sombra-lg: 0 8px 32px rgba(15, 23, 42, 0.12);
 }
 
 html {
@@ -30,8 +41,8 @@ html {
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: url('/static/sky.png') center center / cover no-repeat fixed;
     color: var(--text);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -54,20 +65,21 @@ body.grabbing, body.grabbing * {
 }
 
 .app-header {
-    padding: 20px 20px 10px;
+    padding: 14px 20px;
     text-align: center;
     position: sticky;
     top: 0;
-    background: var(--bg);
+    background: #ffffff;
     z-index: 10;
     border-bottom: 1px solid var(--borde);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
 }
 
 .app-header h1 {
     font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--accent-light), var(--amarillo));
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #0f172a 20%, #16a34a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -88,11 +100,13 @@ body.grabbing, body.grabbing * {
     max-width: 480px;
     display: flex;
     justify-content: space-around;
-    background: rgba(26, 29, 39, 0.95);
+    align-items: center;
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--borde);
-    padding: 6px 0;
+    box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.08);
+    padding: 6px 8px;
     padding-bottom: max(6px, env(safe-area-inset-bottom));
     z-index: 100;
 }
@@ -102,15 +116,16 @@ body.grabbing, body.grabbing * {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    color: var(--text-secondary);
+    color: #94a3b8;
     padding: 6px 10px;
-    border-radius: var(--radius-sm);
+    border-radius: 30px;
     transition: all 0.2s ease;
     gap: 2px;
 }
 
 .nav-item.active {
-    color: var(--accent-light);
+    background: #0f172a;
+    color: #ffffff;
 }
 
 .nav-icon {
@@ -120,7 +135,7 @@ body.grabbing, body.grabbing * {
 
 .nav-label {
     font-size: 0.6rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -139,7 +154,7 @@ body.grabbing, body.grabbing * {
 
 .mes-titulo {
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 .btn-mes {
@@ -149,11 +164,12 @@ body.grabbing, body.grabbing * {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--bg-card);
+    background: #ffffff;
     color: var(--text);
     text-decoration: none;
     font-size: 1rem;
     border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     transition: all 0.2s;
 }
 
@@ -170,19 +186,24 @@ body.grabbing, body.grabbing * {
 }
 
 .resumen-card {
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius-sm);
-    padding: 12px 10px;
+    padding: 14px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
+    border-top: 3px solid transparent;
 }
+
+.resumen-card.cobrado  { border-top-color: var(--verde); }
+.resumen-card.pendiente { border-top-color: var(--rojo); }
+.resumen-card.total    { border-top-color: var(--amarillo); }
 
 .resumen-label {
     font-size: 0.65rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-secondary);
@@ -190,27 +211,19 @@ body.grabbing, body.grabbing * {
 
 .resumen-valor {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
-.resumen-card.cobrado .resumen-valor {
-    color: var(--verde);
-}
-
-.resumen-card.pendiente .resumen-valor {
-    color: var(--rojo);
-}
-
-.resumen-card.total .resumen-valor {
-    color: var(--amarillo);
-}
+.resumen-card.cobrado .resumen-valor  { color: var(--verde); }
+.resumen-card.pendiente .resumen-valor { color: var(--rojo); }
+.resumen-card.total .resumen-valor    { color: var(--amarillo); }
 
 /* ===== Deuda por cliente ===== */
 .deuda-clientes {
     margin-top: 12px;
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     overflow: hidden;
 }
 
@@ -219,7 +232,7 @@ body.grabbing, body.grabbing * {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 14px;
+    padding: 12px 14px;
     background: none;
     border: none;
     color: var(--text-secondary);
@@ -233,12 +246,12 @@ body.grabbing, body.grabbing * {
 }
 
 .deuda-toggle:active {
-    color: var(--accent-light);
+    color: var(--accent);
 }
 
 .deuda-toggle-icon {
     font-size: 1rem;
-    color: var(--accent-light);
+    color: var(--accent);
     transition: transform 0.25s;
 }
 
@@ -288,10 +301,10 @@ body.grabbing, body.grabbing * {
 }
 
 .btn-orden-mini {
-    padding: 5px 12px;
+    padding: 6px 14px;
     border: none;
-    border-radius: 20px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border-radius: 30px;
+    background: #0f172a;
     color: white;
     font-family: inherit;
     font-size: 0.72rem;
@@ -299,14 +312,12 @@ body.grabbing, body.grabbing * {
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
 }
 
 .btn-orden-mini:active {
     transform: scale(0.95);
     opacity: 0.85;
 }
-
 
 
 /* ===== Lista de Pagos (Board Style) ===== */
@@ -317,16 +328,16 @@ body.grabbing, body.grabbing * {
 }
 
 .pago-column {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(15, 23, 42, 0.02);
     border-radius: var(--radius);
     padding: 12px;
     min-height: 100px;
-    border: 1px dashed var(--borde);
+    border: 1.5px dashed rgba(15, 23, 42, 0.12);
     transition: background-color 0.2s;
 }
 
 .pago-column.sortable-ghost {
-    background: rgba(108, 92, 231, 0.1);
+    background: rgba(22, 163, 74, 0.06);
 }
 
 .column-header {
@@ -361,10 +372,9 @@ body.grabbing, body.grabbing * {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-height: 50px; /* Asegura que se pueda soltar aunque esté vacía */
+    min-height: 50px;
 }
 
-/* Ajustes para las cartas cuando están en columnas */
 .pago-item {
     cursor: grab;
     user-select: none;
@@ -375,26 +385,25 @@ body.grabbing, body.grabbing * {
     cursor: grabbing;
 }
 
-/* Forzar cursor de 'grabbing' en todo el cuerpo mientras se arrastra */
 body.grabbing {
     cursor: grabbing !important;
 }
 
 
 .pago-btn {
-    /* pointer-events: none; */ /* Eliminado para permitir el click en el check */
     display: flex;
     align-items: center;
     width: 100%;
     gap: 12px;
     padding: 14px 16px;
-    background: var(--bg-card);
+    background: #ffffff;
     border: 1px solid var(--borde);
     border-radius: var(--radius);
     color: var(--text);
     cursor: pointer;
     font-family: inherit;
     text-align: left;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
     transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.2s;
 }
 
@@ -411,29 +420,13 @@ body.grabbing {
     transform: scale(0.98);
 }
 
-.pago-btn {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 12px;
-    padding: 14px 16px;
-    background: var(--bg-card);
-    border: 1px solid var(--borde);
-    border-radius: var(--radius);
-    color: var(--text);
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.2s;
-}
-
 .pago-item.pagado .pago-btn {
-    background: var(--verde-bg);
-    border-color: rgba(0, 184, 148, 0.2);
+    background: #f0fdf4;
+    border-color: rgba(22, 163, 74, 0.2);
 }
 
 .pago-item.no-pagado .pago-btn {
-    background: var(--bg-card);
+    background: #ffffff;
 }
 
 .pago-check {
@@ -443,7 +436,7 @@ body.grabbing {
 }
 
 .check-icon.pending {
-    opacity: 0.4;
+    opacity: 0.3;
 }
 
 .pago-info {
@@ -460,8 +453,8 @@ body.grabbing {
 
 .pago-ruta {
     font-size: 0.75rem;
-    color: var(--accent-light);
-    font-weight: 500;
+    color: var(--accent);
+    font-weight: 600;
 }
 
 .pago-fecha {
@@ -484,7 +477,7 @@ body.grabbing {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 30px;
 }
 
 .estado-badge.pagado {
@@ -504,28 +497,29 @@ body.grabbing {
 
 .seccion-titulo h2 {
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 /* ===== Formularios ===== */
 .form-nuevo {
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius);
     padding: 16px;
     margin-bottom: 20px;
+    box-shadow: var(--sombra);
     border: 1px solid var(--borde);
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .form-nuevo.form-highlight {
-    border-color: var(--accent-light);
-    box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.2);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
     animation: highlight-pulse 1.2s ease-out forwards;
 }
 
 @keyframes highlight-pulse {
-    0%   { box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.35); }
-    100% { box-shadow: 0 0 0 0px rgba(162, 155, 254, 0); }
+    0%   { box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25); }
+    100% { box-shadow: 0 0 0 0px rgba(22, 163, 74, 0); }
 }
 
 .form-row {
@@ -540,40 +534,42 @@ body.grabbing {
     min-width: 0;
     padding: 12px 14px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--borde);
-    background: var(--bg);
+    border: 1.5px solid var(--borde);
+    background: #f8fafc;
     color: var(--text);
     font-family: inherit;
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
 }
 
 .input-field:focus {
     border-color: var(--accent);
+    background: #ffffff;
 }
 
 .input-field::placeholder {
-    color: var(--text-secondary);
+    color: #94a3b8;
 }
 
 select.input-field {
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b8fa3' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
+    background-color: #f8fafc;
     padding-right: 36px;
 }
 
 select.input-field option {
-    background: var(--bg-card);
+    background: #ffffff;
     color: var(--text);
 }
 
 .arrow-icon {
-    color: var(--accent-light);
+    color: var(--text-secondary);
     font-weight: 700;
     font-size: 1.1rem;
     flex-shrink: 0;
@@ -582,18 +578,19 @@ select.input-field option {
 .btn-primary {
     display: block;
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border: none;
-    border-radius: var(--radius-sm);
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border-radius: 30px;
+    background: #0f172a;
     color: white;
     font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
     text-align: center;
     text-decoration: none;
+    letter-spacing: -0.01em;
 }
 
 .btn-primary:active {
@@ -609,23 +606,24 @@ select.input-field option {
 }
 
 .btn-shortcut {
-    background: var(--bg-card-hover);
-    border: 1px solid var(--borde);
+    background: #f1f5f9;
+    border: 1.5px solid var(--borde);
     color: var(--text-secondary);
     font-size: 0.7rem;
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: 20px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.2s;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
 }
 
 .btn-shortcut:active {
-    background: var(--accent);
+    background: #0f172a;
     color: white;
-    border-color: var(--accent-light);
+    border-color: #0f172a;
     transform: scale(0.95);
 }
 
@@ -637,10 +635,10 @@ select.input-field option {
 }
 
 .cliente-item {
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius);
     padding: 14px 16px;
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     transition: all 0.2s;
 }
 
@@ -655,16 +653,16 @@ select.input-field option {
 }
 
 .cliente-nombre {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.95rem;
 }
 
 .cliente-viajes-count {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    background: var(--bg);
+    background: #f1f5f9;
     padding: 3px 10px;
-    border-radius: 20px;
+    border-radius: 30px;
 }
 
 .cliente-acciones {
@@ -675,8 +673,8 @@ select.input-field option {
 }
 
 .btn-icon {
-    background: var(--bg);
-    border: 1px solid var(--borde);
+    background: #f1f5f9;
+    border: none;
     border-radius: 50%;
     width: 38px;
     height: 38px;
@@ -696,6 +694,7 @@ select.input-field option {
 
 .btn-icon:active {
     transform: scale(0.9);
+    background: #e2e8f0;
 }
 
 /* ===== Form Editar ===== */
@@ -709,12 +708,12 @@ select.input-field option {
     flex: 1;
     padding: 10px;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: 30px;
     background: var(--verde);
     color: white;
     font-family: inherit;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -722,13 +721,13 @@ select.input-field option {
 .btn-cancelar {
     flex: 1;
     padding: 10px;
-    border: 1px solid var(--borde);
-    border-radius: var(--radius-sm);
-    background: var(--bg);
+    border: 1.5px solid var(--borde);
+    border-radius: 30px;
+    background: #f1f5f9;
     color: var(--text-secondary);
     font-family: inherit;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -749,7 +748,7 @@ select.input-field option {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--accent-light);
+    color: var(--text-secondary);
     padding: 12px 4px 4px;
     margin-top: 4px;
 }
@@ -759,10 +758,10 @@ select.input-field option {
 }
 
 .viaje-item {
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius);
     padding: 14px 16px;
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     transition: all 0.2s;
 }
 
@@ -778,12 +777,12 @@ select.input-field option {
 }
 
 .viaje-salida, .viaje-destino {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
 }
 
 .viaje-flecha {
-    color: var(--accent-light);
+    color: var(--accent);
     font-weight: 700;
 }
 
@@ -794,7 +793,7 @@ select.input-field option {
 }
 
 .viaje-monto {
-    font-weight: 700;
+    font-weight: 800;
     color: var(--amarillo);
     font-size: 1rem;
 }
@@ -805,7 +804,6 @@ select.input-field option {
 }
 
 
-
 .lista-historial {
     display: flex;
     flex-direction: column;
@@ -814,10 +812,10 @@ select.input-field option {
 
 .historial-item {
     display: block;
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius);
     padding: 16px;
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     text-decoration: none;
     color: var(--text);
     transition: all 0.2s;
@@ -825,7 +823,7 @@ select.input-field option {
 
 .historial-item:active {
     transform: scale(0.98);
-    background: var(--bg-card-hover);
+    background: #f8fafc;
 }
 
 .historial-mes {
@@ -836,16 +834,16 @@ select.input-field option {
 }
 
 .historial-nombre {
-    font-weight: 700;
+    font-weight: 800;
     font-size: 1rem;
 }
 
 .historial-count {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    background: var(--bg);
+    background: #f1f5f9;
     padding: 3px 10px;
-    border-radius: 20px;
+    border-radius: 30px;
 }
 
 .historial-montos {
@@ -866,7 +864,7 @@ select.input-field option {
 
 .historial-montos .label {
     font-size: 0.6rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-secondary);
@@ -874,23 +872,23 @@ select.input-field option {
 
 .historial-montos .valor {
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 .valor.verde { color: var(--verde); }
-.valor.rojo { color: var(--rojo); }
+.valor.rojo  { color: var(--rojo); }
 
 /* ===== Barra de Progreso ===== */
 .barra-progreso {
-    height: 4px;
-    background: var(--bg);
+    height: 5px;
+    background: #e2e8f0;
     border-radius: 4px;
     overflow: hidden;
 }
 
 .barra-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--verde));
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
     border-radius: 4px;
     transition: width 0.4s ease;
 }
@@ -935,10 +933,9 @@ input[type=number] {
 }
 
 .pago-item, .viaje-item, .cliente-item, .historial-item {
-    /* animation: slideUpFade 0.4s ease forwards; */ /* Eliminado por solicitud del usuario */
+    /* animation: slideUpFade 0.4s ease forwards; */
 }
 
-/* Retrasar animación para efecto cascada (opcional, aplicable a los primeros) */
 .lista-pagos > *:nth-child(1), .lista-viajes > *:nth-child(1) { animation-delay: 0.05s; }
 .lista-pagos > *:nth-child(2), .lista-viajes > *:nth-child(2) { animation-delay: 0.1s; }
 .lista-pagos > *:nth-child(3), .lista-viajes > *:nth-child(3) { animation-delay: 0.15s; }
@@ -957,25 +954,24 @@ input[type=number] {
 }
 
 .flash-toast {
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--verde);
+    background: #0f172a;
+    color: white;
     padding: 12px 24px;
     border-radius: 30px;
     font-size: 0.85rem;
     font-weight: 600;
-    box-shadow: var(--sombra);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
     animation: slideDownFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOut 0.4s ease 2.5s forwards;
 }
 
 @keyframes slideDownFade {
     from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeOut {
     from { opacity: 1; }
-    to { opacity: 0; }
+    to   { opacity: 0; }
 }
 
 /* ===== Apple Style Pago Card ===== */
@@ -996,39 +992,37 @@ input[type=number] {
     width: 100%;
     gap: 16px;
     padding: 16px;
-    background: rgba(40, 42, 54, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #ffffff;
+    border: 1px solid var(--borde);
     border-radius: 20px;
     color: var(--text);
     cursor: pointer;
     text-align: left;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
 }
 
 .apple-pago-item.pagado .apple-pago-btn {
-    background: rgba(0, 184, 148, 0.08);
-    border: 1px solid rgba(0, 184, 148, 0.2);
+    background: #f0fdf4;
+    border: 1px solid rgba(22, 163, 74, 0.2);
 }
 
 .apple-pago-item:active .apple-pago-btn {
     transform: scale(0.96);
-    background: rgba(40, 42, 54, 0.6);
+    background: #f8fafc;
 }
 
 .apple-pago-check {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(15, 23, 42, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.05);
+    background: #f1f5f9;
 }
 
 .apple-pago-item.pagado .apple-pago-check {
@@ -1065,16 +1059,16 @@ input[type=number] {
 
 .apple-pago-title {
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: #0f172a;
     transition: color 0.3s ease;
 }
 
 .apple-pago-amount {
     font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text);
+    font-weight: 800;
+    color: #0f172a;
     font-variant-numeric: tabular-nums;
     transition: color 0.3s ease;
 }
@@ -1094,33 +1088,33 @@ input[type=number] {
 
 .apple-date {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: #94a3b8;
     font-weight: 500;
 }
 
 .apple-pago-item.pagado .apple-pago-title,
 .apple-pago-item.pagado .apple-pago-amount {
-    color: rgba(255, 255, 255, 0.5);
+    color: #94a3b8;
 }
 
 .apple-pago-item.pagado .apple-pago-title {
     text-decoration: line-through;
-    text-decoration-color: rgba(255, 255, 255, 0.4);
+    text-decoration-color: rgba(15, 23, 42, 0.25);
 }
 
-/* ===== Desktop Layout adjustments ===== */
+/* ===== Desktop Layout ===== */
 @media (min-width: 768px) {
     .app-container {
         max-width: 1200px;
         display: grid;
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: 260px 1fr;
         grid-template-rows: auto 1fr;
-        grid-template-areas: 
+        grid-template-areas:
             "sidebar header"
             "sidebar main";
         align-items: start;
     }
-    
+
     .app-header {
         grid-area: header;
         text-align: left;
@@ -1130,12 +1124,12 @@ input[type=number] {
     .app-header h1 {
         font-size: 1.8rem;
     }
-    
+
     .app-content {
         grid-area: main;
         padding: 20px 30px 40px;
     }
-    
+
     .bottom-nav {
         grid-area: sidebar;
         position: sticky;
@@ -1148,27 +1142,36 @@ input[type=number] {
         height: 100vh;
         flex-direction: column;
         justify-content: flex-start;
-        gap: 15px;
-        padding: 40px 20px;
+        gap: 4px;
+        padding: 40px 16px;
         border-top: none;
         border-right: 1px solid var(--borde);
-        background: var(--bg);
+        box-shadow: none;
+        background: #ffffff;
     }
 
     .nav-item {
         flex-direction: row;
         justify-content: flex-start;
-        padding: 12px 20px;
-        gap: 15px;
+        padding: 12px 16px;
+        gap: 12px;
         width: 100%;
+        border-radius: var(--radius-sm);
+    }
+
+    .nav-item.active {
+        border-radius: var(--radius-sm);
     }
 
     .nav-label {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 700;
     }
 
     .nav-icon {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .board-pagos {
@@ -1192,51 +1195,55 @@ input[type=number] {
 /* ===== Balance / Finanzas ===== */
 .balance-hero {
     border-radius: var(--radius);
-    padding: 20px 16px;
-    margin-bottom: 10px;
+    padding: 28px 20px;
+    margin-bottom: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    border: 1px solid var(--borde);
 }
 
 .balance-hero--positivo {
-    background: var(--verde-bg);
-    border-color: rgba(0, 184, 148, 0.25);
+    background: rgba(10, 20, 15, 0.60);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(74, 222, 128, 0.25);
 }
 
 .balance-hero--negativo {
-    background: var(--rojo-bg);
-    border-color: rgba(255, 107, 107, 0.25);
+    background: rgba(20, 8, 8, 0.60);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(252, 165, 165, 0.25);
 }
 
 .balance-hero-label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.55);
 }
 
 .balance-hero-valor {
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
     line-height: 1;
+    color: white;
 }
 
-.balance-hero--positivo .balance-hero-valor { color: var(--verde); }
-.balance-hero--negativo .balance-hero-valor { color: var(--rojo); }
+.balance-hero--positivo .balance-hero-valor { color: #4ade80; }
+.balance-hero--negativo .balance-hero-valor { color: #fca5a5; }
 
 .balance-hero-sub {
-    font-size: 0.72rem;
-    margin-top: 2px;
+    font-size: 0.78rem;
+    margin-top: 4px;
 }
 
-.balance-sub-ingreso { color: var(--verde); font-weight: 600; }
-.balance-sub-gasto   { color: var(--rojo);  font-weight: 600; }
-.balance-sub-sep     { color: var(--text-secondary); }
+.balance-sub-ingreso { color: #86efac; font-weight: 700; }
+.balance-sub-gasto   { color: #fca5a5; font-weight: 700; }
+.balance-sub-sep     { color: rgba(255, 255, 255, 0.35); }
 
 .balance-cards {
     grid-template-columns: 1fr 1fr;
@@ -1244,7 +1251,7 @@ input[type=number] {
 }
 
 .resumen-card.ingreso-extra .resumen-valor {
-    color: var(--accent-light);
+    color: var(--accent);
 }
 
 .resumen-card.gasto .resumen-valor {
@@ -1252,9 +1259,9 @@ input[type=number] {
 }
 
 .finanzas-seccion {
-    background: var(--bg-card);
+    background: #ffffff;
     border-radius: var(--radius);
-    border: 1px solid var(--borde);
+    box-shadow: var(--sombra);
     margin-bottom: 16px;
     overflow: hidden;
 }
@@ -1263,32 +1270,32 @@ input[type=number] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 16px;
+    padding: 16px;
     cursor: pointer;
     user-select: none;
     transition: background 0.15s;
 }
 
 .finanzas-seccion-header:active {
-    background: var(--bg-card-hover);
+    background: #f8fafc;
 }
 
 .finanzas-seccion-titulo {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 800;
 }
 
 .finanzas-total {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .toggle-icon {
-    color: var(--accent-light);
+    color: var(--text-secondary);
     font-size: 1rem;
 }
 
@@ -1308,10 +1315,10 @@ input[type=number] {
     display: flex;
     gap: 6px;
     align-items: center;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 5px 12px;
+    border-radius: 30px;
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .gasto-pill {
@@ -1367,16 +1374,16 @@ input[type=number] {
 
 .finanzas-item-monto {
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
-.gasto-monto { color: var(--rojo); }
+.gasto-monto   { color: var(--rojo); }
 .ingreso-monto { color: var(--verde); }
 
 .btn-eliminar {
     background: none;
     border: none;
-    color: var(--text-secondary);
+    color: #cbd5e1;
     font-size: 0.75rem;
     cursor: pointer;
     padding: 4px 6px;
@@ -1404,20 +1411,20 @@ input[type=number] {
 
 .btn-agregar {
     background: none;
-    border: 1px dashed var(--borde);
-    color: var(--accent-light);
+    border: 1.5px dashed rgba(15, 23, 42, 0.15);
+    color: var(--accent);
     font-family: inherit;
     font-size: 0.8rem;
-    font-weight: 600;
-    padding: 8px 20px;
-    border-radius: var(--radius-sm);
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 30px;
     cursor: pointer;
     transition: all 0.2s;
     width: 100%;
 }
 
 .btn-agregar:active {
-    background: var(--bg-card-hover);
+    background: #f0fdf4;
 }
 
 .finanzas-form {
@@ -1433,8 +1440,8 @@ input[type=number] {
 
 .input-base {
     flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--borde);
+    background: #f8fafc;
+    border: 1.5px solid var(--borde);
     color: var(--text);
     padding: 10px 12px;
     border-radius: var(--radius-sm);
@@ -1445,7 +1452,96 @@ input[type=number] {
 
 .input-base:focus {
     outline: none;
-    border-color: var(--accent-light);
+    border-color: var(--accent);
+    background: white;
+}
+
+/* ===== Glassmorphism ===== */
+
+.app-header {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+}
+
+.bottom-nav {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.viaje-item,
+.cliente-item,
+.historial-item,
+.form-nuevo,
+.deuda-clientes,
+.finanzas-seccion,
+.btn-mes,
+.resumen-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.pago-btn {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.pago-item.pagado .pago-btn {
+    background: rgba(240, 253, 244, 0.70);
+    border-color: rgba(22, 163, 74, 0.30);
+}
+
+.apple-pago-btn {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.apple-pago-item.pagado .apple-pago-btn {
+    background: rgba(240, 253, 244, 0.70);
+    border-color: rgba(22, 163, 74, 0.30);
+}
+
+.pago-column {
+    background: rgba(255, 255, 255, 0.28);
+    border: 1.5px dashed rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.input-field {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1.5px solid rgba(255, 255, 255, 0.80);
+}
+
+.input-field:focus {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.input-base {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1.5px solid rgba(255, 255, 255, 0.80);
+}
+
+.input-base:focus {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+select.input-field {
+    background-color: rgba(255, 255, 255, 0.65);
 }
 
 .form-inline {

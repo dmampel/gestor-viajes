@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Control de Pagos 🚐</title>
+    <title>Gran Gestor 🚐</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
             <h1></h1>
             <h1 style="margin:0;">Gran Gestor</h1>
             {% if session.get('role') %}
-            <a href="{{ url_for('logout') }}" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem; padding: 4px 8px; border: 1px solid var(--borde); border-radius:4px;">Salir</a>
+            <a href="{{ url_for('logout') }}" style="color:var(--text-secondary); text-decoration:none; font-size:0.85rem; padding: 5px 12px; border: 1.5px solid var(--borde); border-radius:30px; font-weight:600;">Salir</a>
             {% else %}
             <div></div>
             {% endif %}
