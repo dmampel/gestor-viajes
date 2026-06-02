@@ -8,24 +8,16 @@
         <a href="{{ url_for('balance', mes=mes_sig) }}" class="btn-mes">▶</a>
     </div>
 
-    <div class="resumen-cards balance-cards">
-        <div class="resumen-card cobrado">
-            <span class="resumen-label">Viajes</span>
-            <span class="resumen-valor">${{ ingresos_viajes|formato_pesos }}</span>
-        </div>
-        <div class="resumen-card ingreso-extra">
-            <span class="resumen-label">Otros ing.</span>
-            <span class="resumen-valor">${{ total_ingresos_manuales|formato_pesos }}</span>
-        </div>
-        <div class="resumen-card gasto">
-            <span class="resumen-label">Gastos</span>
-            <span class="resumen-valor">${{ total_gastos|formato_pesos }}</span>
-        </div>
-        <div class="resumen-card {% if balance_neto >= 0 %}cobrado{% else %}gasto{% endif %}">
-            <span class="resumen-label">Balance</span>
-            <span class="resumen-valor">{{ '-' if balance_neto < 0 else '' }}${{ (balance_neto|abs)|formato_pesos }}</span>
-        </div>
+    <div class="balance-hero {% if balance_neto >= 0 %}balance-hero--positivo{% else %}balance-hero--negativo{% endif %}">
+        <span class="balance-hero-label">Balance {{ nombre_mes }}</span>
+        <span class="balance-hero-valor">{{ '-' if balance_neto < 0 else '+' }}${{ (balance_neto|abs)|formato_pesos }}</span>
+        <span class="balance-hero-sub">
+            <span class="balance-sub-ingreso">${{ total_ingresos|formato_pesos }} ingresos</span>
+            <span class="balance-sub-sep"> · </span>
+            <span class="balance-sub-gasto">${{ total_gastos|formato_pesos }} gastos</span>
+        </span>
     </div>
+
 </div>
 
 <!-- ===== GASTOS ===== -->
