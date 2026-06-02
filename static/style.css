@@ -75,8 +75,12 @@ body.grabbing, body.grabbing * {
 .app-header {
     padding: 14px 20px;
     text-align: center;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
     background: #ffffff;
     z-index: 10;
     border-bottom: 1px solid var(--borde);
@@ -95,7 +99,7 @@ body.grabbing, body.grabbing * {
 
 .app-content {
     flex: 1;
-    padding: 16px 16px 100px;
+    padding: 72px 16px 100px;
 }
 
 /* ===== Bottom Navigation ===== */
@@ -1129,6 +1133,10 @@ input[type=number] {
         grid-area: header;
         text-align: left;
         padding: 20px 30px;
+        position: static;
+        transform: none;
+        max-width: none;
+        width: auto;
     }
 
     .app-header h1 {
