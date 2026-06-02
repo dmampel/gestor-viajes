@@ -30,7 +30,7 @@
         <span class="toggle-icon" id="icon-gastos">▾</span>
     </div>
 
-    <div class="finanzas-body" id="body-gastos">
+    <div class="finanzas-body" id="body-gastos" style="display:none;">
         {% if gastos_por_cat %}
         <div class="categoria-pills">
             {% for cat in gastos_por_cat %}
@@ -97,7 +97,7 @@
         <span class="toggle-icon" id="icon-ingresos">▾</span>
     </div>
 
-    <div class="finanzas-body" id="body-ingresos">
+    <div class="finanzas-body" id="body-ingresos" style="display:none;">
         {% if ingresos_por_cat %}
         <div class="categoria-pills">
             {% for cat in ingresos_por_cat %}
