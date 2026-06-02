@@ -1,51 +1,58 @@
-# 🚐 Gestor de Viajes
+# A ver cuánto gasto y cuánto gano
 
-Sistema de gestión para servicios de transporte y logística, diseñado para organizar viajes diarios, clientes y cobros de manera profesional y eficiente.
+Sistema de gestión personal y de negocio para registrar viajes, cobros, gastos e ingresos — todo en un solo lugar, sin duplicar datos.
 
-## 🚀 Características Principales
+## Características
 
-- **Tablero de Pagos Inteligente**: Gestión simplificada de cobros dividida en **No Pagados** y **Pagados**, con sistema de **arrastrar y soltar (Drag-and-Drop)** para actualizar estados en tiempo real.
-- **Repetir Viaje**: Botón 🔁 en cada viaje reciente para pre-rellenar el formulario con los datos del viaje seleccionado (cliente, ruta, monto y hora), agilizando la carga de viajes frecuentes.
-- **Deuda por Cliente**: Panel colapsable en la pestaña de Pagos que agrupa y muestra el total adeudado por cada cliente con sus viajes pendientes.
-- **Orden de Pago en PDF**: Generación de una orden de cobro profesional por cliente directamente desde el panel de deuda. Incluye encabezado, tabla de recorridos, total a cobrar y pie de página. Se guarda como PDF desde el navegador (sin dependencias extra).
-- **Seguimiento de Hora Exacta**: Registro de la hora específica para cada viaje con visualización automática en formato **12h (am/pm)**.
-- **Gestión de Clientes**: Registro detallado de clientes con seguimiento de estado (Activos/Inactivos).
-- **Log de Viajes**: Registro histórico de rutas y montos, con autocompletado inteligente basado en el último viaje realizado.
-- **Intercambio Rápido de Rutas**: Botón ⇄ para invertir automáticamente la Salida y el Destino, ideal para cargas de viajes de ida y vuelta.
-- **Selección de Fecha Flexible**: Registro de viajes para hoy, mañana o cualquier fecha futura, con botones de acceso rápido optimizados para uso desde el iPhone.
-- **Historial de Cobros**: Resumen mensual de ingresos cobrados, pendientes y totales para un control financiero completo.
-- **Accesibilidad Multi-Dispositivo**: Diseño adaptable tanto para celular (Mobile First) con barra de navegación inferior interactiva, inteligente como para monitor de Escritorio adaptándose usando distribuciones nativas con CSS Grid.
-- **Modo Portfolio (Seguridad de Datos)**: Incluye un novedoso sistema de entrada bifurcada sin registro de usuario, donde los dueños inician sesión a una base de datos original resguardada, pero visitantes de GitHub y reclutadores entran como observadores con una base de datos ficticia clonada (`demo.db`).
-- **Despliegue Automático**: Integración con GitHub y PythonAnywhere para actualizaciones en tiempo real.
+### Balance financiero
+- **Pantalla de balance por mes**: resumen de ingresos totales, gastos totales y balance neto, con navegación mensual.
+- **Ingresos automáticos desde viajes**: al marcar un viaje como pagado, aparece automáticamente en el balance del mes como ingreso.
+- **Otros ingresos**: registro manual de ingresos fuera de la agencia (freelance, alquiler, etc.) con categorías.
+- **Gastos**: registro de egresos por categoría (Servicios, Comida, Transporte, Alquiler, Salud, Otros) con desglose mensual.
+- **Desglose por categoría**: pills visuales que muestran cuánto se gastó/ingresó por cada categoría en el mes.
 
-## 🛠️ Tecnologías Utilizadas
+### Gestión de viajes y cobros
+- **Tablero de Pagos**: columnas de Pendientes y Pagados con **drag-and-drop** para cambiar el estado en tiempo real.
+- **Deuda por cliente**: panel colapsable que agrupa el total adeudado por cada cliente.
+- **Orden de pago en PDF**: generación de orden de cobro profesional por cliente, sin dependencias externas (`window.print()`).
+- **Hora exacta por viaje**: registro con visualización en formato 12h (am/pm).
+- **Repetir viaje**: botón 🔁 para pre-rellenar el formulario con los datos de un viaje anterior.
+- **Intercambio de ruta**: botón ⇄ para invertir salida y destino al instante.
+- **Fecha flexible**: registro para hoy, mañana o cualquier fecha, con botones de acceso rápido.
+
+### Clientes e historial
+- **Gestión de clientes**: registro de clientes activos/inactivos con conteo de viajes.
+- **Log de viajes**: historial con autocompletado inteligente basado en el último viaje de cada cliente.
+- **Historial de cobros**: resumen mensual de cobrado, pendiente y total.
+
+### Acceso y seguridad
+- **Modo demo**: visitantes acceden a una base de datos ficticia (`demo.db`) con datos de ejemplo; el admin usa la base real. Sin registro de usuario.
+- **Diseño mobile-first**: barra de navegación inferior, optimizado para iPhone. Adapta a desktop con CSS Grid.
+
+## Tecnologías
 
 - **Backend**: Python + Flask
-- **Base de Datos**: SQLite (con soporte para migraciones automáticas)
-- **Frontend**: HTML5, Vanilla CSS3 (Modern UI)
-- **Interactividad**: Sortable.js (tablero drag-and-drop)
-- **PDF**: Generación via `window.print()` + CSS `@media print` (sin dependencias externas)
+- **Base de datos**: SQLite con migraciones automáticas
+- **Frontend**: HTML5 + Vanilla CSS3
+- **Drag-and-drop**: Sortable.js
 - **Despliegue**: GitHub Webhooks + PythonAnywhere
 
-## 💻 Instalación Local
+## Instalación local
 
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/dmampel/gestor-viajes.git
-   ```
-2. Instalar dependencias:
-   ```bash
-   pip install flask
-   ```
-3. Ejecutar la aplicación:
-   ```bash
-   python flask_app.py
-   ```
-4. Acceder en el navegador a: `http://127.0.0.1:5001`
+```bash
+git clone https://github.com/dmampel/gestor-viajes.git
+pip install flask
+python flask_app.py
+```
 
-## ☁️ Despliegue (CI/CD)
+Acceder en `http://127.0.0.1:5001`
 
-El proyecto está configurado para actualizarse automáticamente en PythonAnywhere cada vez que se hace un `git push` a la rama `main`.
+Para regenerar los datos del demo:
 
----
-*Desarrollado para la optimización de servicios de transporte.*
+```bash
+python seed_demo.py
+```
+
+## Despliegue
+
+Actualización automática en PythonAnywhere con cada `git push` a `main` vía webhook.

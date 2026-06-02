@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pagos-header">
+    <div class="mes-navegacion">
+        <a href="{{ url_for('balance', mes=mes_ant) }}" class="btn-mes">◀</a>
+        <h2 class="mes-titulo">{{ nombre_mes }}</h2>
+        <a href="{{ url_for('balance', mes=mes_sig) }}" class="btn-mes">▶</a>
+    </div>
+
+    <div class="resumen-cards balance-cards">
+        <div class="resumen-card cobrado">
+            <span class="resumen-label">Viajes</span>
+            <span class="resumen-valor">${{ ingresos_viajes|formato_pesos }}</span>
+        </div>
+        <div class="resumen-card ingreso-extra">
+            <span class="resumen-label">Otros ing.</span>
+            <span class="resumen-valor">${{ total_ingresos_manuales|formato_pesos }}</span>
+        </div>
+        <div class="resumen-card gasto">
+            <span class="resumen-label">Gastos</span>
+            <span class="resumen-valor">${{ total_gastos|formato_pesos }}</span>
+        </div>
+        <div class="resumen-card {% if balance_neto >= 0 %}cobrado{% else %}gasto{% endif %}">
+            <span class="resumen-label">Balance</span>
+            <span class="resumen-valor">{{ '-' if balance_neto < 0 else '' }}${{ (balance_neto|abs)|formato_pesos }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== GASTOS ===== -->
+<div class="finanzas-seccion">
+    <div class="finanzas-seccion-header" onclick="toggleSeccion('gastos')">
+        <div class="finanzas-seccion-titulo">
+            <span>🔴 Gastos</span>
+            <span class="finanzas-total">${{ total_gastos|formato_pesos }}</span>
+        </div>
+        <span class="toggle-icon" id="icon-gastos">▾</span>
+    </div>
+
+    <div class="finanzas-body" id="body-gastos">
+        {% if gastos_por_cat %}
+        <div class="categoria-pills">
+            {% for cat in gastos_por_cat %}
+            <div class="categoria-pill gasto-pill">
+                <span>{{ cat['categoria'] }}</span>
+                <span>${{ cat['total']|formato_pesos }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for g in gastos %}
+        <div class="finanzas-item">
+            <div class="finanzas-item-info">
+                <span class="finanzas-item-desc">{{ g['descripcion'] or g['categoria'] }}</span>
+                <span class="finanzas-item-meta">{{ g['categoria'] }} · {{ g['fecha']|formato_fecha }}</span>
+            </div>
+            <div class="finanzas-item-derecha">
+                <span class="finanzas-item-monto gasto-monto">-${{ g['monto']|formato_pesos }}</span>
+                <form method="POST" action="{{ url_for('eliminar_gasto', id=g['id']) }}" class="form-inline">
+                    <input type="hidden" name="mes" value="{{ mes }}">
+                    <button type="submit" class="btn-eliminar" onclick="return confirm('¿Eliminar este gasto?')">✕</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not gastos %}
+        <p class="finanzas-empty">Sin gastos este mes</p>
+        {% endif %}
+
+        <!-- Formulario agregar gasto -->
+        <div class="finanzas-form-toggle">
+            <button class="btn-agregar" onclick="toggleForm('form-gasto')">+ Agregar gasto</button>
+        </div>
+        <div class="finanzas-form" id="form-gasto" style="display:none;">
+            <form method="POST" action="{{ url_for('crear_gasto') }}">
+                <input type="hidden" name="mes" value="{{ mes }}">
+                <div class="form-row">
+                    <input type="date" name="fecha" value="{{ hoy }}" required class="input-base">
+                    <input type="number" name="monto" placeholder="Monto" min="1" step="any" required class="input-base">
+                </div>
+                <div class="form-row">
+                    <select name="categoria" class="input-base">
+                        {% for cat in categorias_gastos %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="descripcion" placeholder="Descripción (opcional)" class="input-base">
+                </div>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== INGRESOS MANUALES ===== -->
+<div class="finanzas-seccion">
+    <div class="finanzas-seccion-header" onclick="toggleSeccion('ingresos')">
+        <div class="finanzas-seccion-titulo">
+            <span>🟢 Ingresos</span>
+            <span class="finanzas-total">${{ total_ingresos|formato_pesos }}</span>
+        </div>
+        <span class="toggle-icon" id="icon-ingresos">▾</span>
+    </div>
+
+    <div class="finanzas-body" id="body-ingresos">
+        {% if ingresos_por_cat %}
+        <div class="categoria-pills">
+            {% for cat in ingresos_por_cat %}
+            <div class="categoria-pill ingreso-pill">
+                <span>{{ cat['categoria'] }}</span>
+                <span>${{ cat['total']|formato_pesos }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for p in pagos_cobrados %}
+        <div class="finanzas-item">
+            <div class="finanzas-item-info">
+                <span class="finanzas-item-desc">{{ p['cliente_nombre']|cap_palabras }}</span>
+                <span class="finanzas-item-meta">Viaje · {{ p['salida']|cap_palabras }} → {{ p['destino']|cap_palabras }} · {{ p['fecha_pago'][:10]|formato_fecha }}</span>
+            </div>
+            <div class="finanzas-item-derecha">
+                <span class="finanzas-item-monto ingreso-monto">+${{ p['monto']|formato_pesos }}</span>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for i in ingresos_manuales %}
+        <div class="finanzas-item">
+            <div class="finanzas-item-info">
+                <span class="finanzas-item-desc">{{ i['descripcion'] or i['categoria'] }}</span>
+                <span class="finanzas-item-meta">{{ i['categoria'] }} · {{ i['fecha']|formato_fecha }}</span>
+            </div>
+            <div class="finanzas-item-derecha">
+                <span class="finanzas-item-monto ingreso-monto">+${{ i['monto']|formato_pesos }}</span>
+                <form method="POST" action="{{ url_for('eliminar_ingreso_manual', id=i['id']) }}" class="form-inline">
+                    <input type="hidden" name="mes" value="{{ mes }}">
+                    <button type="submit" class="btn-eliminar" onclick="return confirm('¿Eliminar este ingreso?')">✕</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not pagos_cobrados and not ingresos_manuales %}
+        <p class="finanzas-empty">Sin ingresos este mes</p>
+        {% endif %}
+
+        <div class="finanzas-form-toggle">
+            <button class="btn-agregar" onclick="toggleForm('form-ingreso')">+ Agregar ingreso</button>
+        </div>
+        <div class="finanzas-form" id="form-ingreso" style="display:none;">
+            <form method="POST" action="{{ url_for('crear_ingreso_manual') }}">
+                <input type="hidden" name="mes" value="{{ mes }}">
+                <div class="form-row">
+                    <input type="date" name="fecha" value="{{ hoy }}" required class="input-base">
+                    <input type="number" name="monto" placeholder="Monto" min="1" step="any" required class="input-base">
+                </div>
+                <div class="form-row">
+                    <select name="categoria" class="input-base">
+                        {% for cat in categorias_ingresos %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="descripcion" placeholder="Descripción (opcional)" class="input-base">
+                </div>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSeccion(nombre) {
+        const body = document.getElementById('body-' + nombre);
+        const icon = document.getElementById('icon-' + nombre);
+        const abierto = body.style.display !== 'none';
+        body.style.display = abierto ? 'none' : 'block';
+        icon.textContent = abierto ? '▾' : '▴';
+    }
+
+    function toggleForm(id) {
+        const form = document.getElementById(id);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

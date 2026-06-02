@@ -1188,3 +1188,218 @@ input[type=number] {
         grid-column: 1 / -1;
     }
 }
+
+/* ===== Balance / Finanzas ===== */
+.balance-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.resumen-card.ingreso-extra .resumen-valor {
+    color: var(--accent-light);
+}
+
+.resumen-card.gasto .resumen-valor {
+    color: var(--rojo);
+}
+
+.finanzas-seccion {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--borde);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.finanzas-seccion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.finanzas-seccion-header:active {
+    background: var(--bg-card-hover);
+}
+
+.finanzas-seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.finanzas-total {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.toggle-icon {
+    color: var(--accent-light);
+    font-size: 1rem;
+}
+
+.finanzas-body {
+    padding: 0 16px 12px;
+    border-top: 1px solid var(--borde);
+}
+
+.categoria-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 0 8px;
+}
+
+.categoria-pill {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.gasto-pill {
+    background: var(--rojo-bg);
+    color: var(--rojo);
+}
+
+.ingreso-pill {
+    background: var(--verde-bg);
+    color: var(--verde);
+}
+
+.finanzas-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--borde);
+    gap: 8px;
+}
+
+.finanzas-item:last-of-type {
+    border-bottom: none;
+}
+
+.finanzas-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.finanzas-item-desc {
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.finanzas-item-meta {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.finanzas-item-derecha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.finanzas-item-monto {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.gasto-monto { color: var(--rojo); }
+.ingreso-monto { color: var(--verde); }
+
+.btn-eliminar {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    line-height: 1;
+}
+
+.btn-eliminar:active {
+    background: var(--rojo-bg);
+    color: var(--rojo);
+}
+
+.finanzas-empty {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 12px 0 4px;
+    text-align: center;
+}
+
+.finanzas-form-toggle {
+    padding: 12px 0 4px;
+    text-align: center;
+}
+
+.btn-agregar {
+    background: none;
+    border: 1px dashed var(--borde);
+    color: var(--accent-light);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.btn-agregar:active {
+    background: var(--bg-card-hover);
+}
+
+.finanzas-form {
+    padding: 12px 0 4px;
+    border-top: 1px solid var(--borde);
+}
+
+.form-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.input-base {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--borde);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.85rem;
+    min-width: 0;
+}
+
+.input-base:focus {
+    outline: none;
+    border-color: var(--accent-light);
+}
+
+.form-inline {
+    display: inline;
+}

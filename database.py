@@ -80,6 +80,26 @@ def init_db():
     except sqlite3.OperationalError:
         pass  # La columna ya existe
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS gastos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fecha TEXT NOT NULL,
+            monto REAL NOT NULL,
+            categoria TEXT NOT NULL DEFAULT 'Otros',
+            descripcion TEXT DEFAULT ''
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ingresos_manuales (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            fecha TEXT NOT NULL,
+            monto REAL NOT NULL,
+            categoria TEXT NOT NULL DEFAULT 'Otros',
+            descripcion TEXT DEFAULT ''
+        )
+    ''')
+
     conn.commit()
     conn.close()
 

@@ -3,7 +3,7 @@ from database import get_db, init_db
 
 # Inicializar Base de Datos al arrancar (incluyendo migraciones)
 init_db()
-from datetime import datetime, date, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 import os
 import subprocess
 
@@ -148,7 +148,7 @@ def cap_palabras(s):
 
 @app.route('/')
 def index():
-    return redirect(url_for('pagos', mes=mes_actual()))
+    return redirect(url_for('balance', mes=mes_actual()))
 
 
 # =====================
@@ -539,6 +539,156 @@ def generar_orden():
                            nombre_mes=nombre_mes(mes))
 
 
+
+
+CATEGORIAS_GASTOS = ['Servicios', 'Comida', 'Transporte', 'Alquiler', 'Salud', 'Otros']
+CATEGORIAS_INGRESOS = ['Freelance', 'Alquiler', 'Inversión', 'Otros']
+
+
+# =====================
+# BALANCE / FINANZAS
+# =====================
+
+@app.route('/balance')
+def balance():
+    mes = request.args.get('mes', mes_actual())
+    db = get_db()
+
+    pagos_cobrados = db.execute('''
+        SELECT p.id, p.monto, p.fecha_pago, v.salida, v.destino, c.nombre as cliente_nombre
+        FROM pagos p
+        JOIN viajes v ON p.viaje_id = v.id
+        JOIN clientes c ON v.cliente_id = c.id
+        WHERE p.pagado = 1 AND substr(p.fecha_pago, 1, 7) = ?
+        ORDER BY p.fecha_pago DESC
+    ''', (mes,)).fetchall()
+
+    ingresos_viajes = sum(p['monto'] for p in pagos_cobrados)
+
+    ingresos_manuales_list = db.execute('''
+        SELECT * FROM ingresos_manuales
+        WHERE substr(fecha, 1, 7) = ?
+        ORDER BY fecha DESC, id DESC
+    ''', (mes,)).fetchall()
+
+    ingresos_por_cat = db.execute('''
+        SELECT categoria, SUM(monto) as total
+        FROM ingresos_manuales
+        WHERE substr(fecha, 1, 7) = ?
+        GROUP BY categoria ORDER BY total DESC
+    ''', (mes,)).fetchall()
+
+    gastos_list = db.execute('''
+        SELECT * FROM gastos
+        WHERE substr(fecha, 1, 7) = ?
+        ORDER BY fecha DESC, id DESC
+    ''', (mes,)).fetchall()
+
+    gastos_por_cat = db.execute('''
+        SELECT categoria, SUM(monto) as total
+        FROM gastos
+        WHERE substr(fecha, 1, 7) = ?
+        GROUP BY categoria ORDER BY total DESC
+    ''', (mes,)).fetchall()
+
+    db.close()
+
+    total_ingresos_manuales = sum(i['monto'] for i in ingresos_manuales_list)
+    total_gastos = sum(g['monto'] for g in gastos_list)
+    total_ingresos = ingresos_viajes + total_ingresos_manuales
+    balance_neto = total_ingresos - total_gastos
+
+    return render_template('balance.html',
+        mes=mes,
+        nombre_mes=nombre_mes(mes),
+        mes_ant=mes_anterior(mes),
+        mes_sig=mes_siguiente(mes),
+        pagos_cobrados=pagos_cobrados,
+        ingresos_viajes=ingresos_viajes,
+        ingresos_manuales=ingresos_manuales_list,
+        total_ingresos_manuales=total_ingresos_manuales,
+        ingresos_por_cat=ingresos_por_cat,
+        gastos=gastos_list,
+        total_gastos=total_gastos,
+        gastos_por_cat=gastos_por_cat,
+        total_ingresos=total_ingresos,
+        balance_neto=balance_neto,
+        categorias_gastos=CATEGORIAS_GASTOS,
+        categorias_ingresos=CATEGORIAS_INGRESOS,
+        hoy=get_ahora().strftime('%Y-%m-%d')
+    )
+
+
+@app.route('/gastos/nuevo', methods=['POST'])
+def crear_gasto():
+    mes = request.form.get('mes', mes_actual())
+    fecha = request.form.get('fecha', '').strip()
+    monto = request.form.get('monto', '0').strip()
+    categoria = request.form.get('categoria', 'Otros').strip()
+    descripcion = request.form.get('descripcion', '').strip()
+
+    if fecha and monto:
+        try:
+            monto_num = float(monto)
+        except ValueError:
+            monto_num = 0
+        if monto_num > 0:
+            db = get_db()
+            db.execute(
+                'INSERT INTO gastos (fecha, monto, categoria, descripcion) VALUES (?, ?, ?, ?)',
+                (fecha, monto_num, categoria, descripcion)
+            )
+            db.commit()
+            db.close()
+            flash('✅ Gasto registrado')
+
+    return redirect(url_for('balance', mes=mes))
+
+
+@app.route('/gastos/<int:id>/eliminar', methods=['POST'])
+def eliminar_gasto(id):
+    mes = request.form.get('mes', mes_actual())
+    db = get_db()
+    db.execute('DELETE FROM gastos WHERE id = ?', (id,))
+    db.commit()
+    db.close()
+    return redirect(url_for('balance', mes=mes))
+
+
+@app.route('/ingresos/nuevo', methods=['POST'])
+def crear_ingreso_manual():
+    mes = request.form.get('mes', mes_actual())
+    fecha = request.form.get('fecha', '').strip()
+    monto = request.form.get('monto', '0').strip()
+    categoria = request.form.get('categoria', 'Otros').strip()
+    descripcion = request.form.get('descripcion', '').strip()
+
+    if fecha and monto:
+        try:
+            monto_num = float(monto)
+        except ValueError:
+            monto_num = 0
+        if monto_num > 0:
+            db = get_db()
+            db.execute(
+                'INSERT INTO ingresos_manuales (fecha, monto, categoria, descripcion) VALUES (?, ?, ?, ?)',
+                (fecha, monto_num, categoria, descripcion)
+            )
+            db.commit()
+            db.close()
+            flash('✅ Ingreso registrado')
+
+    return redirect(url_for('balance', mes=mes))
+
+
+@app.route('/ingresos/<int:id>/eliminar', methods=['POST'])
+def eliminar_ingreso_manual(id):
+    mes = request.form.get('mes', mes_actual())
+    db = get_db()
+    db.execute('DELETE FROM ingresos_manuales WHERE id = ?', (id,))
+    db.commit()
+    db.close()
+    return redirect(url_for('balance', mes=mes))
 
 
 # =====================
