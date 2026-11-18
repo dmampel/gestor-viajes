@@ -1,15 +1,8 @@
-# A ver cuánto gasto y cuánto gano
+# Gran Gestor
 
-Sistema de gestión personal y de negocio para registrar viajes, cobros, gastos e ingresos — todo en un solo lugar, sin duplicar datos.
+Sistema de gestión personal y de negocio para registrar viajes y cobros.
 
 ## Características
-
-### Balance financiero
-- **Pantalla de balance por mes**: resumen de ingresos totales, gastos totales y balance neto, con navegación mensual.
-- **Ingresos automáticos desde viajes**: al marcar un viaje como pagado, aparece automáticamente en el balance del mes como ingreso.
-- **Otros ingresos**: registro manual de ingresos fuera de la agencia (freelance, alquiler, etc.) con categorías.
-- **Gastos**: registro de egresos por categoría (Servicios, Comida, Transporte, Alquiler, Salud, Otros) con desglose mensual.
-- **Desglose por categoría**: pills visuales que muestran cuánto se gastó/ingresó por cada categoría en el mes.
 
 ### Gestión de viajes y cobros
 - **Tablero de Pagos**: columnas de Pendientes y Pagados con **drag-and-drop** para cambiar el estado en tiempo real.

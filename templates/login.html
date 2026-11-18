@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso - Gran Gestor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -30,10 +28,7 @@
             margin-bottom: 6px;
             font-weight: 900;
             letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #0f172a 20%, #16a34a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text);
         }
         .login-subtitle {
             font-size: 0.85rem;
@@ -48,7 +43,7 @@
             margin-bottom: 16px;
         }
         .demo-box {
-            border: 1.5px dashed rgba(22, 163, 74, 0.35);
+            border: 1.5px dashed #c7d2fe;
         }
         .admin-box {
             border: 1.5px solid var(--borde);
@@ -66,12 +61,12 @@
             line-height: 1.5;
         }
         .btn-demo {
-            background: linear-gradient(135deg, #16a34a, #4ade80);
+            background: var(--accent);
             color: white;
             border: none;
             padding: 14px;
             width: 100%;
-            border-radius: 30px;
+            border-radius: var(--radius-sm);
             font-weight: 800;
             font-size: 0.95rem;
             cursor: pointer;
@@ -93,7 +88,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h1 class="login-title">Gran Gestor 🚐</h1>
+        <h1 class="login-title">Gran Gestor</h1>
         <p class="login-subtitle">Control de viajes y finanzas</p>
 
         {% with messages = get_flashed_messages() %}

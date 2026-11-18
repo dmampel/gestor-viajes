@@ -54,7 +54,7 @@
 
     {% for viaje in viajes %}
         <div class="viaje-item {{ 'inactivo' if not viaje.activo }}" id="viaje-{{ viaje.id }}">
-            <div class="cliente-nombre" style="font-size: 0.75rem; color: var(--accent-light); margin-bottom: 4px;">
+            <div class="cliente-nombre" style="font-size: 0.75rem; color: var(--accent); margin-bottom: 4px;">
                 {{ viaje.cliente_nombre | cap_palabras }}
             </div>
             <div class="viaje-ruta">
