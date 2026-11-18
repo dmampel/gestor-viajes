@@ -14,16 +14,16 @@
     --text-secondary: #6b7280;
     --text-faint: #9ca3af;
 
-    --accent: #4f46e5;
-    --accent-hover: #4338ca;
-    --accent-soft: #eef2ff;
-    --accent-light: #4f46e5; /* compat: usado inline en viajes.html */
+    --accent: #a16207;
+    --accent-hover: #854d0e;
+    --accent-soft: #fbf3dd;
+    --accent-light: #a16207; /* compat: usado inline en viajes.html */
 
     --verde: #059669;
     --verde-bg: #ecfdf5;
     --rojo: #dc2626;
     --rojo-bg: #fef2f2;
-    --amarillo: #b45309;
+    --amarillo: #a16207;
     --amarillo-bg: #fffbeb;
 
     --sidebar: #111827;
@@ -552,7 +552,7 @@ select.input-field {
 
 /* Historial */
 .historial-item { display: block; text-decoration: none; color: var(--text); transition: border-color 0.15s; }
-.historial-item:hover { border-color: #c7d2fe; }
+.historial-item:hover { border-color: #e9d9a6; }
 .historial-mes { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .historial-nombre { font-weight: 600; font-size: 1rem; }
 .historial-montos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
