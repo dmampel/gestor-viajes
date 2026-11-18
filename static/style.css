@@ -85,7 +85,7 @@ body.grabbing, body.grabbing * {
     align-items: center;
     gap: 10px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--text);
 }
@@ -142,7 +142,7 @@ body.grabbing, body.grabbing * {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
     padding: 6px 4px;
     text-decoration: none;
     color: var(--text-faint);
@@ -152,13 +152,13 @@ body.grabbing, body.grabbing * {
 .nav-item.active { color: var(--accent); }
 
 .nav-icon { display: grid; place-items: center; }
-.nav-icon svg { width: 22px; height: 22px; }
+.nav-icon svg { width: 24px; height: 24px; }
 
-.nav-label { font-size: 0.65rem; font-weight: 600; }
+.nav-label { font-size: 0.7rem; font-weight: 600; }
 
 /* ===== Títulos ===== */
 .seccion-titulo { margin-bottom: 16px; }
-.seccion-titulo h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.seccion-titulo h2 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
 
 /* ===== Pagos: header ===== */
 .pagos-header { margin-bottom: 16px; }
@@ -167,10 +167,10 @@ body.grabbing, body.grabbing * {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
-.mes-titulo { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.mes-titulo { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
 
 .btn-mes {
     display: flex;
@@ -195,7 +195,7 @@ body.grabbing, body.grabbing * {
     background: var(--bg-card);
     border: 1px solid var(--borde);
     border-radius: var(--radius);
-    padding: 12px 14px;
+    padding: 12px 16px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -204,16 +204,14 @@ body.grabbing, body.grabbing * {
 }
 
 .resumen-label {
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--text-secondary);
 }
 
 .resumen-valor {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
 }
@@ -238,15 +236,13 @@ body.grabbing, body.grabbing * {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 14px;
+    padding: 12px 16px;
     background: none;
     border: none;
     color: var(--text-secondary);
     font-family: inherit;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     cursor: pointer;
 }
 .deuda-toggle:hover { color: var(--text); }
@@ -257,7 +253,7 @@ body.grabbing, body.grabbing * {
     opacity: 0;
     overflow: hidden;
     transition: max-height 0.25s ease, opacity 0.2s ease;
-    padding: 0 14px;
+    padding: 0 16px;
 }
 
 .deuda-cliente-row {
@@ -270,7 +266,7 @@ body.grabbing, body.grabbing * {
 .deuda-cliente-info { display: flex; flex-direction: column; gap: 2px; }
 .deuda-nombre { font-size: 0.88rem; font-weight: 600; }
 .deuda-viajes { font-size: 0.72rem; color: var(--text-secondary); }
-.deuda-monto { font-size: 0.9rem; font-weight: 700; color: var(--rojo); font-variant-numeric: tabular-nums; }
+.deuda-monto { font-size: 0.9rem; font-weight: 600; color: var(--rojo); font-variant-numeric: tabular-nums; }
 .deuda-acciones { display: flex; align-items: center; gap: 10px; }
 
 .btn-orden-mini {
@@ -303,10 +299,8 @@ body.grabbing, body.grabbing * {
 .column-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-left: 2px; }
 .column-icon { font-size: 0.95rem; }
 .column-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 0.8rem;
+    font-weight: 600;
     color: var(--text-secondary);
 }
 
@@ -330,7 +324,7 @@ body.grabbing, body.grabbing * {
     align-items: center;
     width: 100%;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 12px 16px;
     background: var(--bg-card);
     border: 1px solid var(--borde);
     border-radius: var(--radius);
@@ -344,8 +338,8 @@ body.grabbing, body.grabbing * {
 .apple-pago-item.pagado .apple-pago-btn { background: var(--verde-bg); border-color: #a7f3d0; }
 
 .apple-pago-check {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     border: 1.5px solid #d1d5db;
     display: flex;
@@ -357,13 +351,13 @@ body.grabbing, body.grabbing * {
 }
 .apple-pago-item.pagado .apple-pago-check { background: var(--verde); border-color: var(--verde); color: #fff; }
 
-.apple-pago-check svg { width: 14px; height: 14px; opacity: 0; transition: opacity 0.2s; }
+.apple-pago-check svg { width: 16px; height: 16px; opacity: 0; transition: opacity 0.2s; }
 .apple-pago-item.pagado .apple-pago-check svg { opacity: 1; }
 
-.apple-pago-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.apple-pago-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .apple-pago-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .apple-pago-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
-.apple-pago-amount { font-size: 0.95rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.apple-pago-amount { font-size: 0.95rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .apple-pago-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
 .apple-pago-footer { display: flex; justify-content: space-between; align-items: center; }
 .apple-date { font-size: 0.72rem; color: var(--text-faint); }
@@ -378,7 +372,7 @@ body.grabbing, body.grabbing * {
     align-items: center;
     width: 100%;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 12px 16px;
     background: var(--bg-card);
     border: 1px solid var(--borde);
     border-radius: var(--radius);
@@ -397,7 +391,7 @@ body.grabbing, body.grabbing * {
 .estado-badge {
     font-size: 0.68rem;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 4px 8px;
     border-radius: 6px;
 }
 .estado-badge.pagado { background: var(--verde-bg); color: var(--verde); }
@@ -452,7 +446,7 @@ select.input-field {
 .btn-primary {
     display: block;
     width: 100%;
-    padding: 11px 14px;
+    padding: 12px 16px;
     border: none;
     border-radius: var(--radius-sm);
     background: var(--accent);
@@ -491,7 +485,7 @@ select.input-field {
     background: var(--bg-card);
     border: 1px solid var(--borde);
     border-radius: var(--radius);
-    padding: 14px 16px;
+    padding: 16px;
     box-shadow: var(--sombra);
 }
 .cliente-item.inactivo, .viaje-item.inactivo { opacity: 0.5; }
@@ -504,7 +498,7 @@ select.input-field {
     font-weight: 600;
     color: var(--text-secondary);
     background: var(--bg-muted);
-    padding: 3px 8px;
+    padding: 4px 8px;
     border-radius: 6px;
 }
 .cliente-acciones { display: flex; gap: 6px; margin-top: 10px; justify-content: flex-end; }
@@ -529,7 +523,7 @@ select.input-field {
 
 .btn-guardar, .btn-cancelar {
     flex: 1;
-    padding: 9px;
+    padding: 8px;
     border-radius: var(--radius-sm);
     font-family: inherit;
     font-size: 0.85rem;
@@ -542,37 +536,33 @@ select.input-field {
 .btn-cancelar:hover { background: var(--bg-muted); }
 
 .viaje-grupo-header {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 0.8rem;
+    font-weight: 600;
     color: var(--text-secondary);
-    padding: 14px 2px 2px;
+    padding: 16px 4px 4px;
 }
 .viaje-grupo-header:first-child { padding-top: 0; }
 
 .viaje-ruta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .viaje-salida, .viaje-destino { font-weight: 600; font-size: 0.92rem; }
-.viaje-flecha { color: var(--accent); font-weight: 700; }
+.viaje-flecha { color: var(--accent); font-weight: 600; }
 .viaje-meta { display: flex; justify-content: space-between; align-items: center; }
-.viaje-monto { font-weight: 700; color: var(--text); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.viaje-monto { font-weight: 600; color: var(--text); font-size: 1rem; font-variant-numeric: tabular-nums; }
 .viaje-acciones { display: flex; gap: 6px; }
 
 /* Historial */
 .historial-item { display: block; text-decoration: none; color: var(--text); transition: border-color 0.15s; }
 .historial-item:hover { border-color: #c7d2fe; }
 .historial-mes { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.historial-nombre { font-weight: 700; font-size: 1rem; }
+.historial-nombre { font-weight: 600; font-size: 1rem; }
 .historial-montos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .historial-cobrado, .historial-pendiente, .historial-total { display: flex; flex-direction: column; gap: 2px; }
 .historial-montos .label {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--text-secondary);
 }
-.historial-montos .valor { font-size: 0.95rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.historial-montos .valor { font-size: 0.95rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .valor.verde { color: var(--verde); }
 .valor.rojo { color: var(--rojo); }
 
@@ -605,7 +595,7 @@ input[type=number] { -moz-appearance: textfield; }
 .flash-toast {
     background: var(--text);
     color: #fff;
-    padding: 10px 18px;
+    padding: 12px 16px;
     border-radius: var(--radius-sm);
     font-size: 0.85rem;
     font-weight: 500;
@@ -669,7 +659,7 @@ input[type=number] { -moz-appearance: textfield; }
         gap: 10px;
         padding: 4px 12px 24px;
         color: #fff;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 1.05rem;
         letter-spacing: -0.01em;
     }
@@ -691,7 +681,7 @@ input[type=number] { -moz-appearance: textfield; }
 
     .board-pagos { grid-template-columns: 1fr 1fr; align-items: start; }
     .resumen-valor { font-size: 1.4rem; }
-    .resumen-card { padding: 16px 18px; }
+    .resumen-card { padding: 16px 20px; }
 
     .lista-viajes, .lista-clientes, .lista-historial {
         display: grid;
@@ -702,3 +692,26 @@ input[type=number] { -moz-appearance: textfield; }
     }
     .empty-state, .viaje-grupo-header, .fecha-hoy-mini { grid-column: 1 / -1; }
 }
+
+/* ===== Íconos, estado y firma (ruta) ===== */
+.icon { width: 16px; height: 16px; flex-shrink: 0; vertical-align: -3px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.btn-icon { color: var(--text-secondary); }
+.btn-icon:hover { color: var(--text); }
+.btn-icon.btn-peligro:hover { color: var(--rojo); background: var(--rojo-bg); }
+.meta-fecha { display: inline-flex; align-items: center; gap: 4px; }
+.column-icon { display: grid; place-items: center; color: var(--text-secondary); }
+.deuda-nombre-grupo { display: inline-flex; align-items: center; gap: 8px; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); display: inline-block; }
+.dot.on { background: var(--verde); }
+.dot.off { background: var(--rojo); }
+
+.check-icon { display: grid; place-items: center; color: var(--text-faint); }
+.pago-item.pagado .check-icon { color: var(--verde); }
+.check-icon .icon { width: 24px; height: 24px; }
+
+/* Ruta: punto — línea — punto */
+.ruta-linea { display: inline-flex; align-items: center; width: 32px; flex-shrink: 0; margin: 0 8px; vertical-align: middle; }
+.ruta-linea::before, .ruta-linea::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.ruta-linea::before { box-shadow: none; }
+.ruta-linea i { flex: 1; height: 1.5px; background: var(--accent); opacity: 0.5; }

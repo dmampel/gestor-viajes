@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% from '_icons.html' import icon %}
 
 {% block content %}
 <div class="seccion-titulo">
-    <h2>👥 Clientes</h2>
+    <h2>Clientes</h2>
 </div>
 
 <!-- Formulario para agregar cliente -->
@@ -24,12 +25,12 @@
 
         <div class="cliente-acciones">
             <!-- Botón editar -->
-            <button type="button" class="btn-icon" onclick="toggleEdit({{ cliente.id }})" id="btn-editar-{{ cliente.id }}">✏️</button>
+            <button type="button" class="btn-icon" onclick="toggleEdit({{ cliente.id }})" id="btn-editar-{{ cliente.id }}" title="Editar" aria-label="Editar">{{ icon('edit') }}</button>
 
             <!-- Botón activar/desactivar -->
             <form method="POST" action="{{ url_for('toggle_cliente', id=cliente.id) }}" style="display:inline">
-                <button type="submit" class="btn-icon" id="btn-toggle-{{ cliente.id }}">
-                    {% if cliente.activo %}🟢{% else %}🔴{% endif %}
+                <button type="submit" class="btn-icon" id="btn-toggle-{{ cliente.id }}" title="{{ 'Desactivar' if cliente.activo else 'Activar' }}" aria-label="{{ 'Desactivar' if cliente.activo else 'Activar' }}">
+                    <span class="dot {{ 'on' if cliente.activo else 'off' }}"></span>
                 </button>
             </form>
         </div>
@@ -50,7 +51,7 @@
 
     {% if not clientes %}
     <div class="empty-state">
-        <p>No hay clientes todavía. ¡Agregá el primero! ☝️</p>
+        <p>Todavía no hay clientes</p>
     </div>
     {% endif %}
 </div>

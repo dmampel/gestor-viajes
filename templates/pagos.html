@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from '_icons.html' import icon %}
 
 {% block content %}
 <div class="pagos-header">
@@ -39,7 +40,7 @@
 {% if ns.deuda %}
 <div class="deuda-clientes" id="deuda-clientes">
     <button class="deuda-toggle" onclick="toggleDeuda()" id="btn-deuda">
-        <span>👥 Deuda por cliente</span>
+        <span>Deuda por cliente</span>
         <span class="deuda-toggle-icon" id="deuda-icon">▾</span>
     </button>
     <div class="deuda-lista" id="deuda-lista">
@@ -56,7 +57,7 @@
                     {% for pid in datos.ids.split(',') %}
                     <input type="hidden" name="pago_ids" value="{{ pid }}">
                     {% endfor %}
-                    <button type="submit" class="btn-orden-mini" title="Generar orden de pago para {{ nombre | cap_palabras }}">📄 Orden de Pago</button>
+                    <button type="submit" class="btn-orden-mini" title="Generar orden de pago para {{ nombre | cap_palabras }}">{{ icon('file') }} Orden de pago</button>
                 </form>
             </div>
         </div>
@@ -71,10 +72,10 @@
     <h2 class="fecha-hoy-mini">
         {{ fecha_hoy }}
     </h2>
-    <!-- ⏳ No Pagados -->
+    <!-- No pagados -->
     <div class="pago-column" id="col-pendientes">
         <div class="column-header">
-            <span class="column-icon">⏳</span>
+            <span class="column-icon">{{ icon('clock') }}</span>
             <span class="column-title">Pendientes</span>
         </div>
 
@@ -85,11 +86,11 @@
         </div>
     </div>
 
-    <!-- ✅ Pagados -->
+    <!-- Pagados -->
     <div class="pago-column" id="col-pagados">
         <div class="column-header">
-            <span class="column-icon">✅</span>
-            <span class="column-title">Viajes Pagados</span>
+            <span class="column-icon">{{ icon('check') }}</span>
+            <span class="column-title">Viajes pagados</span>
         </div>
         <div class="cards-container" data-status="1">
             {% for pago in pagos if pago.pagado %}

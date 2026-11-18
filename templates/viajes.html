@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% from '_icons.html' import icon %}
 
 {% block content %}
 <div class="seccion-titulo">
-    <h2>🚐 Viajes</h2>
+    <h2>Viajes</h2>
 </div>
 
 <!-- Formulario para agregar viaje -->
@@ -49,7 +50,7 @@
 <!-- Lista de viajes recientes -->
 <div class="lista-viajes">
     {% if viajes %}
-        <div class="viaje-grupo-header">Viajes Recientes (30 días)</div>
+        <div class="viaje-grupo-header">Viajes recientes (últimos 30 días)</div>
     {% endif %}
 
     {% for viaje in viajes %}
@@ -59,20 +60,20 @@
             </div>
             <div class="viaje-ruta">
                 <span class="viaje-salida">{{ viaje.salida | cap_palabras }}</span>
-                <span class="viaje-flecha">→</span>
+                <span class="ruta-linea"><i></i></span>
                 <span class="viaje-destino">{{ viaje.destino | cap_palabras }}</span>
             </div>
             <div class="viaje-meta">
                 <div style="display: flex; flex-direction: column; gap: 2px;">
                     <span class="viaje-monto">${{ viaje.monto|formato_pesos }}</span>
-                    <span class="pago-fecha" style="font-size: 0.65rem;">📅 {{ viaje.fecha_creacion|formato_fecha }} {% if viaje.hora %}- {{ viaje.hora | formato_hora_12h }}{% endif %}</span>
+                    <span class="pago-fecha meta-fecha">{{ icon('calendar') }}{{ viaje.fecha_creacion|formato_fecha }} {% if viaje.hora %}- {{ viaje.hora | formato_hora_12h }}{% endif %}</span>
                 </div>
                 <div class="viaje-acciones">
                     <button type="button" class="btn-icon btn-sm" title="Repetir viaje"
-                        onclick="repetirViaje({{ viaje.cliente_id }}, '{{ viaje.salida }}', '{{ viaje.destino }}', {{ viaje.monto }}, '{{ viaje.hora }}')">🔁</button>
-                    <button type="button" class="btn-icon btn-sm" onclick="toggleEditViaje({{ viaje.id }})">✏️</button>
+                        onclick="repetirViaje({{ viaje.cliente_id }}, '{{ viaje.salida }}', '{{ viaje.destino }}', {{ viaje.monto }}, '{{ viaje.hora }}')" aria-label="Repetir viaje">{{ icon('repeat') }}</button>
+                    <button type="button" class="btn-icon btn-sm" onclick="toggleEditViaje({{ viaje.id }})" title="Editar" aria-label="Editar">{{ icon('edit') }}</button>
                     <form method="POST" action="{{ url_for('eliminar_viaje', id=viaje.id) }}" style="display:inline">
-                        <button type="submit" class="btn-icon btn-sm">🗑️</button>
+                        <button type="submit" class="btn-icon btn-sm btn-peligro" title="Eliminar" aria-label="Eliminar">{{ icon('trash') }}</button>
                     </form>
                 </div>
             </div>
@@ -102,7 +103,7 @@
 
     {% if not viajes and clientes %}
     <div class="empty-state">
-        <p>No hay viajes todavía. ¡Agregá el primero! ☝️</p>
+        <p>Todavía no hay viajes</p>
     </div>
     {% endif %}
 </div>

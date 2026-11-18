@@ -1,16 +1,16 @@
-<div class="pago-item {{ 'pagado' if pago.pagado else 'no-pagado' }}" data-pago-id="{{ pago.id }}">
+{% from '_icons.html' import icon %}<div class="pago-item {{ 'pagado' if pago.pagado else 'no-pagado' }}" data-pago-id="{{ pago.id }}">
     <div class="pago-btn" onclick="togglePagado({{ pago.id }})">
         <div class="pago-check">
             {% if pago.pagado %}
-            <span class="check-icon">✅</span>
+            <span class="check-icon">{{ icon('check') }}</span>
             {% else %}
-            <span class="check-icon pending">⬜</span>
+            <span class="check-icon">{{ icon('circle') }}</span>
             {% endif %}
         </div>
         <div class="pago-info">
             <span class="pago-nombre">{{ pago.cliente_nombre|cap_palabras }}</span>
-            <span class="pago-ruta">{{ pago.salida|cap_palabras }} → {{ pago.destino|cap_palabras }}</span>
-            <span class="pago-fecha">📅 {{ pago.fecha_creacion|formato_dia_amigable }} {% if pago.hora %}- {{ pago.hora | formato_hora_12h }}{% endif %}</span>
+            <span class="pago-ruta">{{ pago.salida|cap_palabras }}<span class="ruta-linea"><i></i></span>{{ pago.destino|cap_palabras }}</span>
+            <span class="pago-fecha meta-fecha">{{ icon('calendar') }}{{ pago.fecha_creacion|formato_dia_amigable }} {% if pago.hora %}- {{ pago.hora | formato_hora_12h }}{% endif %}</span>
             <span class="pago-monto">${{ pago.monto|formato_pesos }}</span>
         </div>
         <div class="pago-estado">
